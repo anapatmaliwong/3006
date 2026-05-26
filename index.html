@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AC Library — ม.3/6</title>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;600;700;800;900&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght=200;300;400;600;700;800;900&family=IBM+Plex+Sans+Thai:wght=300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ── TOKENS ─────────────────────────────────────────── */
 :root{
@@ -138,7 +138,7 @@ nav{
 main{max-width:1180px;margin:0 auto;padding:36px 20px 80px}
 
 /* ── HERO ────────────────────────────────────────── */
-.hero{text-align:center;padding:64px 20px 52px;position:relative}
+.hero{text-align:center;padding:64px 20px 20px;position:relative}
 .hero-tag{
   display:inline-flex;align-items:center;gap:8px;
   background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.2);
@@ -167,6 +167,30 @@ main{max-width:1180px;margin:0 auto;padding:36px 20px 80px}
 }
 .pill:hover{border-color:var(--border2)}
 .pill strong{color:var(--text)}
+
+/* 📦 DATA MANAGEMENT BOX (ระบบแชร์ข้อมูลทางไลน์กลุ่ม) ────────────────── */
+.share-box{
+  background:rgba(14,21,37,.7);border:1px dashed var(--border2);
+  border-radius:14px;padding:20px;margin:24px auto 0;max-width:650px;text-align:center;
+}
+.share-box h3{font-family:'Kanit',sans-serif;font-size:.95rem;color:var(--white);margin-bottom:6px}
+.share-box p{font-size:.8rem;color:var(--muted);margin-bottom:14px}
+.share-flex{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-share{
+  padding:8px 16px;font-family:'Kanit',sans-serif;font-size:.83rem;font-weight:700;
+  border:none;border-radius:8px;cursor:pointer;transition:all .2s;
+}
+.btn-share.exp{background:linear-gradient(135deg,var(--gold),#f97316);color:#000}
+.btn-share.imp{background:linear-gradient(135deg,var(--a),var(--a2));color:#fff}
+.share-textarea{
+  width:100%;height:100px;background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-family:monospace;font-size:.75rem;
+  padding:10px;margin-top:12px;display:none;outline:none;
+}
+.btn-action{
+  padding:6px 12px;background:var(--em);color:#fff;border:none;border-radius:6px;
+  font-family:'Kanit',sans-serif;font-size:.8rem;cursor:pointer;margin-top:8px;display:none;
+}
 
 /* ── SECTION HEAD ────────────────────────────────── */
 .sh{display:flex;align-items:center;gap:14px;margin:44px 0 18px}
@@ -401,7 +425,7 @@ tr:hover td{background:rgba(79,142,247,.04)}
   background:var(--card);border:1px solid var(--border);border-radius:14px;
   padding:26px;margin-bottom:14px;
 }
-.qtext{font-family:'Kanit',sans-serif;font-size:1.05rem;color:var(--white);margin-bottom:20px;line-height:1.6}
+.qtext"font-family:'Kanit',sans-serif;font-size:1.05rem;color:var(--white);margin-bottom:20px;line-height:1.6}
 .opts-grid{display:grid;gap:9px}
 .obtn{
   width:100%;text-align:left;padding:12px 16px;
@@ -500,10 +524,8 @@ tr:hover td{background:rgba(79,142,247,.04)}
 </head>
 <body>
 
-<!-- BG CANVAS -->
 <canvas id="bg-canvas"></canvas>
 
-<!-- LOGIN -->
 <div id="loginPage">
   <div class="login-wrap">
     <div class="login-glow"></div>
@@ -526,7 +548,6 @@ tr:hover td{background:rgba(79,142,247,.04)}
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <nav>
     <div class="nav-brand">AC <span>Library</span></div>
@@ -541,7 +562,6 @@ tr:hover td{background:rgba(79,142,247,.04)}
   </nav>
 
   <main>
-    <!-- HERO -->
     <div class="hero fade-up">
       <div class="hero-tag">ปีการศึกษา 2569 · Digital &amp; Technology Program</div>
       <div class="hero-title"><span class="grad">ม.3/6</span></div>
@@ -552,9 +572,19 @@ tr:hover td{background:rgba(79,142,247,.04)}
         <div class="pill">👥 นักเรียน <strong>35 คน</strong></div>
         <div class="pill">📚 <strong>6 วิชา</strong></div>
       </div>
+
+      <div class="share-box">
+        <h3 id="shareTitle">🔄 ระบบอัปเดตข้อมูลห้องเรียน</h3>
+        <p id="shareDesc">นำเข้าข้อมูลรหัสจากแอดมิน เพื่อดูบทเรียนและควิซล่าสุด</p>
+        <div class="share-flex">
+          <button class="btn-share exp" id="btnExport" onclick="exportData()" style="display:none">📦 คัดลอกรหัสส่งให้เพื่อน</button>
+          <button class="btn-share imp" onclick="toggleImportArea()">📥 อัปเดตข้อมูลจากแอดมิน</button>
+        </div>
+        <textarea class="share-textarea" id="shareArea" placeholder="วางรหัสข้อความที่ก๊อปมาจากแอดมินตรงนี้..."></textarea>
+        <button class="btn-action" id="btnActionImp" onclick="importData()">✔️ ยืนยันการอัปเดต</button>
+      </div>
     </div>
 
-    <!-- SUBJECTS -->
     <div class="sh"><h2>📚 วิชาเรียน</h2><div class="sh-line"></div></div>
     <div class="subjects">
       <div class="sc sci fade-up" onclick="openSubject('sci')">
@@ -589,7 +619,6 @@ tr:hover td{background:rgba(79,142,247,.04)}
       </div>
     </div>
 
-    <!-- CLASS LIST -->
     <div class="sh"><h2>👥 รายชื่อนักเรียน ม.3/6</h2><div class="sh-line"></div></div>
     <div class="search-wrap">
       <input class="search" type="text" placeholder="ค้นหาชื่อหรือรหัสประจำตัว..." oninput="filterTable(this.value)">
@@ -607,7 +636,6 @@ tr:hover td{background:rgba(79,142,247,.04)}
   </main>
 </div>
 
-<!-- SUBJECT MODAL -->
 <div class="overlay" id="overlay" onclick="overlayBg(event)">
   <div class="modal">
     <div class="modal-hd">
@@ -616,7 +644,6 @@ tr:hover td{background:rgba(79,142,247,.04)}
     </div>
     <div class="modal-body">
 
-      <!-- ADMIN PANEL -->
       <div class="admin-wrap" id="adminWrap" style="display:none">
         <div class="admin-title">⚙️ Admin Panel</div>
         <div class="tabs" id="adminTabs">
@@ -624,7 +651,6 @@ tr:hover td{background:rgba(79,142,247,.04)}
           <button class="tab" onclick="switchAdminTab('quiz',this)">📝 สร้างแบบทดสอบ</button>
         </div>
 
-        <!-- VIDEO FORM -->
         <div id="vidForm" class="aform">
           <input id="vTitle" placeholder="ชื่อวิดีโอ (จำเป็น)">
           <div class="vsrc-tabs">
@@ -642,7 +668,7 @@ tr:hover td{background:rgba(79,142,247,.04)}
               <div id="dropInner">
                 <div class="dropzone-icon">🎬</div>
                 <div class="dropzone-label">คลิกหรือลากไฟล์วิดีโอมาวางที่นี่</div>
-                <div class="dropzone-sub">รองรับ MP4, MOV, WebM, AVI, MKV</div>
+                <div class="dropzone-sub">รองรับไฟล์วิดีโอ (บันทึกไว้ในเครื่องเบราว์เซอร์นี้ชั่วคราว)</div>
               </div>
             </label>
             <div id="filePreview">
@@ -659,7 +685,6 @@ tr:hover td{background:rgba(79,142,247,.04)}
           <button class="btn-admin" onclick="addVideo()">➕ เพิ่มวิดีโอ</button>
         </div>
 
-        <!-- QUIZ FORM -->
         <div id="quizForm" class="aform" style="display:none">
           <input id="qTitle" placeholder="ชื่อแบบทดสอบ">
           <div id="qContainer"></div>
@@ -668,7 +693,6 @@ tr:hover td{background:rgba(79,142,247,.04)}
         </div>
       </div>
 
-      <!-- CONTENT TABS -->
       <div class="tabs" id="contentTabs">
         <button class="tab on" onclick="switchContent('vids',this)">📹 วิดีโอสอน</button>
         <button class="tab" onclick="switchContent('quiz',this)">📝 แบบทดสอบ</button>
@@ -679,7 +703,6 @@ tr:hover td{background:rgba(79,142,247,.04)}
       </div>
       <div id="panelQuiz" style="display:none">
         <div id="qlistEl" class="qlist"></div>
-        <!-- QUIZ PLAY -->
         <div id="quizPlay">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
             <button class="qback" onclick="exitQuiz()">← กลับ</button>
@@ -714,7 +737,6 @@ tr:hover td{background:rgba(79,142,247,.04)}
   </div>
 </div>
 
-<!-- VIDEO PLAYER -->
 <div id="vidOverlay" onclick="closeVid(event)">
   <div class="vid-box">
     <div class="vid-label" id="vidLabel"></div>
@@ -764,16 +786,16 @@ const STUDENTS=[
   {no:34,id:'60041',first:'ชนะชัย',last:'วราวรรณ ณ อยุธยา'},
   {no:35,id:'60455',first:'ฐาปกรณ์',last:'เจริญกิจรักษา'},
 ];
-const ADMIN_NO='27', ADMIN_PASS='anapatmaliwong59892';
+const ADMIN_NO='27', ADMIN_PASS='59892';
 const SUBJ_ICONS={sci:'🔬 วิทยาศาสตร์',math:'📐 คณิตศาสตร์',eng:'🌐 ภาษาอังกฤษ',soc:'🌏 สังคมศึกษา',hist:'📜 ประวัติศาสตร์',comp:'💻 คอมพิวเตอร์'};
 
-/* ══════════════ STATE ══════════════ */
+/* ──════════════ STATE ══════════════ */
 let user=null,isAdmin=false,subj=null,selFile=null;
 let curQuiz=null,qIdx=0,qOk=0;
 let tempQs=[];
 let curSrc='yt';
 
-/* ══════════════ INDEXEDDB ══════════════ */
+/* ──════════════ INDEXEDDB (เก็บวิดีโอของเครื่องแอดมิน) ══════════════ */
 let db=null;
 const IDB_NAME='ACLib',IDB_VER=1,STORE='vfiles';
 function initDB(){
@@ -812,14 +834,80 @@ function dbDel(fid){
   });
 }
 
-/* ══════════════ STORAGE ══════════════ */
-const SK=k=>'acl_'+k;
-function load(k){try{return JSON.parse(localStorage.getItem(SK(k)))||null}catch{return null}}
-function save(k,v){localStorage.setItem(SK(k),JSON.stringify(v))}
-function getC(s){return load('c_'+s)||{videos:[],quizzes:[]}}
-function setC(s,d){save('c_'+s,d)}
+/* ──════════════ LOCALSTORAGE WRAPPERS ══════════════ */
+function getC(s){
+  try{return JSON.parse(localStorage.getItem('acl_c_'+s))||{videos:[],quizzes:[]}}
+  catch(e){return{videos:[],quizzes:[]}}
+}
+function setC(s,d){
+  localStorage.setItem('acl_c_'+s,JSON.stringify(d));
+}
 
-/* ══════════════ ANIMATED BG ══════════════ */
+/* ──════════════ IMPORT / EXPORT SYSTEM (ระบบจัดการส่งรหัสข้อมูล) ══════════════ */
+function toggleImportArea() {
+  const area = document.getElementById('shareArea');
+  const btn = document.getElementById('btnActionImp');
+  if(area.style.display === 'block') {
+    area.style.display = 'none';
+    btn.style.display = 'none';
+  } else {
+    area.style.display = 'block';
+    btn.style.display = 'block';
+    area.value = '';
+    area.placeholder = 'วางรหัสข้อความที่ก๊อปมาจากแอดมินตรงนี้...';
+  }
+}
+
+// แอดมินกดดึงข้อมูลทั้งหมดออกไปเป็นตัวอักษร
+function exportData() {
+  const allData = {};
+  ['sci','math','eng','soc','hist','comp'].forEach(s => {
+    allData[s] = getC(s);
+  });
+  
+  const jsonStr = JSON.stringify(allData);
+  // เข้ารหัสข้อความเล็กน้อยให้ดูเรียบร้อยป้องการก๊อปขาด
+  const encodedData = btoa(unescape(encodeURIComponent(jsonStr)));
+  
+  const area = document.getElementById('shareArea');
+  area.style.display = 'block';
+  document.getElementById('btnActionImp').style.display = 'none';
+  area.value = encodedData;
+  area.select();
+  
+  navigator.clipboard.writeText(encodedData).then(() => {
+    toast('📋 คัดลอกรหัสข้อมูลสำเร็จ! ส่งรหัสนี้ให้เพื่อนในไลน์กลุ่มได้เลย');
+  }).catch(() => {
+    toast('กรุณาก๊อปปี้ข้อความในกล่องด้านล่างส่งให้เพื่อน','err');
+  });
+}
+
+// นักเรียนหรือเพื่อนนำรหัสที่ได้มาวางเพื่อเซฟลงเครื่องตัวเอง
+function importData() {
+  const code = document.getElementById('shareArea').value.trim();
+  if(!code) { toast('กรุณาวางรหัสข้อมูลก่อนครับ','err'); return; }
+  
+  try {
+    const jsonStr = decodeURIComponent(escape(atob(code)));
+    const importedData = JSON.parse(jsonStr);
+    
+    // บันทึกลงเครื่องผู้ใช้ทีละวิชา
+    ['sci','math','eng','soc','hist','comp'].forEach(s => {
+      if(importedData[s]) {
+        setC(s, importedData[s]);
+      }
+    });
+    
+    toast('✨ อัปเดตข้อมูลบทเรียนจากแอดมินสำเร็จแล้ว!');
+    document.getElementById('shareArea').style.display = 'none';
+    document.getElementById('btnActionImp').style.display = 'none';
+    updateCounts();
+  } catch(e) {
+    toast('❌ รหัสข้อมูลไม่ถูกต้องหรือคัดลอกมาไม่ครบถ้วน','err');
+  }
+}
+
+/* ──════════════ ANIMATED BG ══════════════ */
 (function(){
   const canvas=document.getElementById('bg-canvas');
   const ctx=canvas.getContext('2d');
@@ -860,7 +948,7 @@ function setC(s,d){save('c_'+s,d)}
   resize(); mkOrbs(); draw();
 })();
 
-/* ══════════════ LOGIN ══════════════ */
+/* ──════════════ LOGIN ══════════════ */
 document.getElementById('inPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 document.getElementById('inNo').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 function doLogin(){
@@ -874,6 +962,12 @@ function doLogin(){
     document.getElementById('navAva').textContent='A';
     document.getElementById('navName').textContent='เลขที่ 27 · '+s.first;
     document.getElementById('navAdmin').style.display='inline';
+    
+    // ปรับ UI โหมดแอดมิน
+    document.getElementById('btnExport').style.display = 'block';
+    document.getElementById('shareTitle').textContent = '📦 ระบบส่งออกข้อมูลบทเรียน (Admin)';
+    document.getElementById('shareDesc').textContent = 'เพิ่มบทเรียนเสร็จแล้ว กดปุ่มนี้ส่งรหัสให้เพื่อนไปอัปเดตในไลน์ห้องได้เลยครับ';
+
     renderTable(STUDENTS); updateCounts(); return;
   }
   if(no===ADMIN_NO){document.getElementById('loginErr').style.display='block';return}
@@ -884,6 +978,12 @@ function doLogin(){
   document.getElementById('app').style.display='block';
   document.getElementById('navAva').textContent=s.first.charAt(0);
   document.getElementById('navName').textContent='เลขที่ '+s.no+' · '+s.first;
+  
+  // ปรับ UI โหมดนักเรียนทั่วไป
+  document.getElementById('btnExport').style.display = 'none';
+  document.getElementById('shareTitle').textContent = '📥 ระบบอัปเดตข้อมูลห้องเรียน';
+  document.getElementById('shareDesc').textContent = 'นำเข้าข้อมูลรหัสจากแอดมิน เพื่อดูบทเรียนและควิซล่าสุดที่แอดมินอัปเดต';
+
   renderTable(STUDENTS); updateCounts();
 }
 function logout(){
@@ -895,7 +995,7 @@ function logout(){
   document.getElementById('loginErr').style.display='none';
 }
 
-/* ══════════════ TABLE ══════════════ */
+/* ──════════════ TABLE ══════════════ */
 function renderTable(list){
   document.getElementById('tbody').innerHTML=list.map(s=>`
     <tr class="${s.no===27?'tr-admin':''}">
@@ -911,7 +1011,7 @@ function filterTable(q){
   renderTable(f);
 }
 
-/* ══════════════ COUNTS ══════════════ */
+/* ──════════════ COUNTS ══════════════ */
 function updateCounts(){
   ['sci','math','eng','soc','hist','comp'].forEach(s=>{
     const d=getC(s);
@@ -919,7 +1019,7 @@ function updateCounts(){
   });
 }
 
-/* ══════════════ MODAL ══════════════ */
+/* ──════════════ MODAL ══════════════ */
 function openSubject(s){
   subj=s;
   document.getElementById('mTitle').textContent=SUBJ_ICONS[s];
@@ -945,7 +1045,7 @@ function switchContent(tab,btn){
   document.getElementById('panelQuiz').style.display=tab==='quiz'?'block':'none';
 }
 
-/* ══════════════ VIDEO SOURCE ══════════════ */
+/* ──════════════ VIDEO SOURCE ══════════════ */
 function switchSrc(src,btn){
   curSrc=src;
   document.querySelectorAll('.vsrc').forEach(b=>b.classList.remove('on'));
@@ -956,17 +1056,19 @@ function switchSrc(src,btn){
   else document.getElementById('vUrl').value='';
 }
 
-/* ══════════════ FILE HANDLING ══════════════ */
+/* ──════════════ FILE HANDLING ══════════════ */
 (function(){
   const zone=document.getElementById('dropzone');
-  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag')});
-  zone.addEventListener('dragleave',()=>zone.classList.remove('drag'));
-  zone.addEventListener('drop',e=>{
-    e.preventDefault();zone.classList.remove('drag');
-    const f=e.dataTransfer.files[0];
-    if(f&&f.type.startsWith('video/'))applyFile(f);
-    else toast('กรุณาเลือกไฟล์วิดีโอ','err');
-  });
+  if(zone){
+    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag')});
+    zone.addEventListener('dragleave',()=>zone.classList.remove('drag'));
+    zone.addEventListener('drop',e=>{
+      e.preventDefault();zone.classList.remove('drag');
+      const f=e.dataTransfer.files[0];
+      if(f&&f.type.startsWith('video/'))applyFile(f);
+      else toast('กรุณาเลือกไฟล์วิดีโอ','err');
+    });
+  }
 })();
 
 function onFileChange(el){if(el.files[0])applyFile(el.files[0])}
@@ -989,12 +1091,12 @@ function clearFile(){
   document.getElementById('filePreview').style.display='none';
 }
 
-/* ══════════════ ADD VIDEO ══════════════ */
+/* ──════════════ ADD VIDEO ══════════════ */
 function ytId(url){
   const m=url.match(/(?:youtu\.be\/|[?&]v=|embed\/)([\w-]{11})/);
   return m?m[1]:null;
 }
-async function addVideo(){
+function addVideo(){
   const title=document.getElementById('vTitle').value.trim();
   if(!title){toast('กรุณากรอกชื่อวิดีโอ','err');return}
   if(curSrc==='yt'){
@@ -1007,7 +1109,7 @@ async function addVideo(){
     document.getElementById('vTitle').value='';
     document.getElementById('vUrl').value='';
     renderVids(); updateCounts();
-    toast('✅ เพิ่มวิดีโอ YouTube แล้ว');
+    toast('เพิ่มวิดีโอสำเร็จ! อย่าลืมกดส่งออกรหัสข้อมูลแชร์ให้เพื่อนด้วยนะครับ');
   } else {
     if(!selFile){toast('กรุณาเลือกไฟล์วิดีโอ','err');return}
     const fid='vf_'+Date.now();
@@ -1015,8 +1117,7 @@ async function addVideo(){
     const pf=document.getElementById('progFill');
     const pt=document.getElementById('progTxt');
     pw.style.display='block'; pf.style.width='30%'; pt.textContent='กำลังบันทึก...';
-    try{
-      await dbSave(fid,selFile);
+    dbSave(fid,selFile).then(()=>{
       pf.style.width='100%'; pt.textContent='บันทึกสำเร็จ!';
       const d=getC(subj);
       d.videos.push({id:Date.now(),title,type:'file',fid,fname:selFile.name,fsize:selFile.size});
@@ -1025,15 +1126,15 @@ async function addVideo(){
       clearFile();
       setTimeout(()=>{pw.style.display='none';pf.style.width='0%'},1000);
       renderVids(); updateCounts();
-      toast('✅ อัปโหลดไฟล์สำเร็จ');
-    }catch(e){
+      toast('บันทึกวิดีโอแล้ว (หมายเหตุ: ไฟล์ดิบจะเล่นได้เฉพาะเครื่องนี้)');
+    }).catch(e=>{
       pw.style.display='none';
       toast('เกิดข้อผิดพลาด: '+e.message,'err');
-    }
+    });
   }
 }
 
-/* ══════════════ RENDER VIDEOS ══════════════ */
+/* ──════════════ RENDER VIDEOS ══════════════ */
 function renderVids(){
   const d=getC(subj);
   const el=document.getElementById('vgrid');
@@ -1042,7 +1143,7 @@ function renderVids(){
     return;
   }
   el.innerHTML=d.videos.map(v=>`
-    <div class="vcard" data-vid="${v.id}" onclick="playVid(${v.id})">
+    <div class="vcard" onclick="playVid(${v.id})">
       <div class="vthumb">
         ${v.type==='yt'
           ?`<img src="https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg" loading="lazy" onerror="this.style.display='none'">`
@@ -1053,15 +1154,15 @@ function renderVids(){
       <div class="vinfo">
         <div class="vtitle">${escHtml(v.title)}</div>
         <div class="vmeta">
-          ${v.type==='yt'?'<span class="vbadge yt">YouTube</span>':'<span class="vbadge file">ไฟล์</span>'}
-          ${isAdmin?`<button class="btn-del" data-del="${v.id}" onclick="event.stopPropagation();delVid(${v.id})">🗑 ลบ</button>`:''}
+          ${v.type==='yt'?'<span class="vbadge yt">YouTube</span>':'<span class="vbadge file">ไฟล์ดิบเครื่องผู้ลง</span>'}
+          ${isAdmin?`<button class="btn-del" onclick="event.stopPropagation();delVid(${v.id})">🗑 ลบ</button>`:''}
         </div>
       </div>
     </div>`).join('');
 }
 function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-async function playVid(vid){
+function playVid(vid){
   const d=getC(subj);
   const v=d.videos.find(x=>x.id===vid);
   if(!v)return;
@@ -1070,13 +1171,12 @@ async function playVid(vid){
   if(v.type==='yt'){
     content.innerHTML=`<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${v.ytId}?autoplay=1&rel=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe></div>`;
   } else {
-    try{
-      const file=await dbGet(v.fid);
-      if(!file){toast('ไม่พบไฟล์ — อาจต้องอัปโหลดใหม่','err');return}
+    dbGet(v.fid).then(file=>{
+      if(!file){toast('ไม่พบไฟล์บนเครื่องนี้ (กรณีเป็นไฟล์วิดีโอดิบ ไม่ใช่ลิงก์ YouTube จะดูได้เฉพาะคอมเครื่องแอดมินที่อัปโหลดเท่านั้นครับ)','err');return}
       const url=URL.createObjectURL(file);
       content.innerHTML=`<video class="file-vid" controls autoplay src="${url}"></video>`;
       content.querySelector('video').onended=()=>URL.revokeObjectURL(url);
-    }catch(e){toast('โหลดวิดีโอไม่ได้: '+e.message,'err');return}
+    }).catch(e=>toast('โหลดวิดีโอไม่ได้: '+e.message,'err'));
   }
   document.getElementById('vidOverlay').classList.add('open');
 }
@@ -1091,16 +1191,16 @@ function closeVid(e,force){
     c.innerHTML='';
   }
 }
-async function delVid(id){
+function delVid(id){
   const d=getC(subj);
   const v=d.videos.find(x=>x.id===id);
-  if(v&&v.type==='file')await dbDel(v.fid);
+  if(!v)return;
+  if(v.type==='file')dbDel(v.fid);
   d.videos=d.videos.filter(x=>x.id!==id);
-  setC(subj,d); renderVids(); updateCounts();
-  toast('ลบวิดีโอแล้ว');
+  setC(subj,d); renderVids(); updateCounts(); toast('ลบวิดีโอแล้ว');
 }
 
-/* ══════════════ QUIZ BUILDER ══════════════ */
+/* ──════════════ QUIZ BUILDER ══════════════ */
 function addQ(){
   tempQs.push({qid:Date.now(),text:'',opts:['','','',''],correct:0});
   renderQForm();
@@ -1136,10 +1236,10 @@ function saveQuiz(){
   setC(subj,d);
   document.getElementById('qTitle').value='';
   tempQs=[]; renderQForm(); renderQuizList(); updateCounts();
-  toast('✅ บันทึกแบบทดสอบแล้ว');
+  toast('บันทึกแบบทดสอบแล้ว อย่าลืมส่งออกรหัสข้อมูลให้เพื่อนด้วยครับ');
 }
 
-/* ══════════════ QUIZ LIST ══════════════ */
+/* ──════════════ QUIZ LIST ──────────────── */
 function renderQuizList(){
   const d=getC(subj);
   const el=document.getElementById('qlistEl');
@@ -1163,11 +1263,10 @@ function renderQuizList(){
 function delQuiz(id){
   const d=getC(subj);
   d.quizzes=d.quizzes.filter(q=>q.id!==id);
-  setC(subj,d); renderQuizList(); updateCounts();
-  toast('ลบแบบทดสอบแล้ว');
+  setC(subj,d); renderQuizList(); updateCounts(); toast('ลบแบบทดสอบแล้ว');
 }
 
-/* ══════════════ QUIZ PLAY ══════════════ */
+/* ──════════════ QUIZ PLAY ──────────────── */
 function startQuiz(id){
   const d=getC(subj);
   curQuiz=d.quizzes.find(q=>q.id===id);
@@ -1217,7 +1316,7 @@ function exitQuiz(){
   curQuiz=null;
 }
 
-/* ══════════════ TOAST ══════════════ */
+/* ──════════════ TOAST ══════════════ */
 let _tt;
 function toast(msg,type='ok'){
   const el=document.getElementById('toast');
@@ -1227,7 +1326,7 @@ function toast(msg,type='ok'){
   _tt=setTimeout(()=>el.className='',3000);
 }
 
-/* ══════════════ INIT ══════════════ */
+/* ──════════════ INIT ══════════════ */
 initDB();
 </script>
 </body>
