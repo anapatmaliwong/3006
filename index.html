@@ -1,526 +1,1291 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-theme="dark" data-style="glass" data-lite="false">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>3006 — Imperial Gold 3D Edition</title>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;600;700;800;900&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3006</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@200;300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ── [THEME & SECURITY] ─────────────────────────── */
+/* ═══════════════════════════════════════════
+   3006 — Design System
+   Theme: Obsidian & Sage
+═══════════════════════════════════════════ */
 :root {
-  --bg: #050403;
-  --bg2: #0f0c08;
-  --surface: rgba(23, 19, 14, 0.75);
-  --card: rgba(31, 25, 18, 0.85);
-  --card2: rgba(43, 34, 24, 0.9);
-  --border: rgba(212, 175, 55, 0.25);
-  --border2: rgba(212, 175, 55, 0.5);
-  --glow: rgba(212, 175, 55, 0.15);
-  --a: #d4af37; /* Gold */
-  --a2: #fcf6ba; /* Light Gold */
-  --a3: #aa771c; /* Dark Gold */
-  --gold: #f59e0b;
-  --em: #10b981;
-  --red: #f43f5e;
-  --text: #fdfbf7;
-  --muted: #a39887;
-  --white: #fff;
-  --r: 16px;
-  --r2: 12px;
+  /* Palette — Dark */
+  --bg0:#080c10;
+  --bg1:#0d1117;
+  --bg2:#111820;
+  --sur:#161e2a;
+  --card:#1a2232;
+  --card2:#1f2838;
+  --bdr:rgba(120,160,200,.12);
+  --bdr2:rgba(120,160,200,.22);
+
+  /* Accent — Sage teal */
+  --ac:#4ecdc4;
+  --ac2:#a8e6df;
+  --ac3:#2ba89f;
+  --acg:linear-gradient(135deg,#4ecdc4,#2ba89f);
+
+  /* Semantic */
+  --em:#6ee7b7;
+  --red:#f87171;
+  --warn:#fbbf24;
+  --blue:#60a5fa;
+
+  /* Text */
+  --tx:#e8f0fe;
+  --tx2:#9ab0cc;
+  --tx3:#5a7a99;
+  --white:#fff;
+
+  /* Glass */
+  --glass:rgba(13,17,23,.72);
+  --glass2:rgba(22,30,42,.85);
+  --blur:16px;
+
+  /* Radius */
+  --r:16px;
+  --r2:12px;
+  --r3:24px;
+
+  /* Transitions */
+  --t:.22s cubic-bezier(.4,0,.2,1);
+  --ts:.15s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="light"]{
+  --bg0:#f0f4f8;--bg1:#f7fafc;--bg2:#edf2f7;
+  --sur:#ffffff;--card:#ffffff;--card2:#f7fafc;
+  --bdr:rgba(0,0,0,.08);--bdr2:rgba(0,0,0,.15);
+  --glass:rgba(255,255,255,.75);--glass2:rgba(247,250,252,.9);
+  --tx:#1a202c;--tx2:#4a5568;--tx3:#718096;
 }
 
-/* Light Theme Variables */
-body.light-theme {
-  --bg: #fcfbf8;
-  --bg2: #f4ebd8;
-  --surface: rgba(255, 252, 245, 0.85);
-  --card: rgba(255, 255, 255, 0.9);
-  --card2: rgba(245, 240, 230, 0.9);
-  --border: rgba(212, 175, 55, 0.5);
-  --border2: rgba(212, 175, 55, 0.8);
-  --text: #1a1712;
-  --muted: #6b6355;
+/* ── RESET ─────────────── */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Sarabun',sans-serif;
+  background:var(--bg0);
+  color:var(--tx);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.6;
+}
+[data-lite="true"] *{animation:none!important;transition:none!important}
+button{font-family:inherit;cursor:pointer;border:none;outline:none}
+input,textarea,select{font-family:inherit;outline:none}
+img{display:block;max-width:100%}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:3px}
+
+/* ── BACKGROUND CANVAS ─── */
+#bgc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+
+/* ══════════════════════════════════
+   LOGIN PAGE
+══════════════════════════════════ */
+#loginPage{
+  position:fixed;inset:0;z-index:500;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse 100% 80% at 50% 0%,#0d2030 0%,var(--bg0) 60%);
+}
+.login-scene{
+  position:relative;width:min(420px,95vw);
+  animation:floatUp .7s cubic-bezier(.16,1,.3,1) both;
+}
+.login-glow{
+  position:absolute;inset:-40px;z-index:-1;
+  background:radial-gradient(ellipse,rgba(78,205,196,.12) 0%,transparent 70%);
+  border-radius:50%;
+}
+.login-card{
+  background:var(--glass2);
+  backdrop-filter:blur(32px);
+  border:1px solid var(--bdr2);
+  border-radius:28px;
+  padding:48px 40px 40px;
+  box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 0 1px rgba(78,205,196,.06);
+}
+.login-logo-wrap{text-align:center;margin-bottom:8px}
+.login-logo{
+  font-family:'Prompt',sans-serif;
+  font-size:3.2rem;font-weight:800;
+  letter-spacing:-3px;
+  background:linear-gradient(135deg,#4ecdc4,#a8e6df,#4ecdc4);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  line-height:1;
+}
+.login-sub{
+  text-align:center;color:var(--tx3);
+  font-size:.82rem;letter-spacing:.5px;
+  margin-bottom:32px;margin-top:4px;
+}
+.login-divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--bdr2),transparent);
+  margin:0 0 28px;
+}
+.lf{margin-bottom:16px}
+.lf label{
+  display:block;font-size:.73rem;font-weight:600;
+  color:var(--tx3);margin-bottom:7px;
+  letter-spacing:1px;text-transform:uppercase;
+}
+.lf input{
+  width:100%;padding:12px 16px;
+  background:rgba(0,0,0,.3);
+  border:1px solid var(--bdr);
+  border-radius:12px;color:var(--tx);font-size:.95rem;
+  transition:border-color var(--t),box-shadow var(--t);
+}
+[data-theme="light"] .lf input{background:rgba(0,0,0,.04)}
+.lf input:focus{
+  border-color:var(--ac);
+  box-shadow:0 0 0 3px rgba(78,205,196,.15);
+}
+.lf input::placeholder{color:var(--tx3)}
+.login-btn{
+  width:100%;padding:14px;margin-top:4px;
+  border-radius:12px;font-size:1rem;font-weight:700;
+  font-family:'Prompt',sans-serif;letter-spacing:.3px;
+  background:var(--acg);color:#042a28;
+  transition:opacity var(--ts),transform var(--ts),box-shadow var(--ts);
+  box-shadow:0 8px 24px rgba(78,205,196,.25);
+}
+.login-btn:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 12px 32px rgba(78,205,196,.35)}
+.login-btn:active{transform:translateY(1px)}
+.login-err{
+  color:var(--red);font-size:.82rem;
+  margin-top:10px;text-align:center;display:none;
+}
+.login-hint{
+  text-align:center;color:var(--tx3);
+  font-size:.76rem;margin-top:14px;
 }
 
-/* Solid Buttons Mode */
-body.solid-buttons .glass-btn, body.solid-buttons .sc, body.solid-buttons .modal, body.solid-buttons .qbox {
-  backdrop-filter: none !important;
-  background: var(--card2) !important;
+/* ══════════════════════════════════
+   APP SHELL
+══════════════════════════════════ */
+#app{display:none;min-height:100vh;position:relative;z-index:1}
+
+/* ── FLOATING NAVBAR ─── */
+#navbar{
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);
+  z-index:400;
+  display:flex;align-items:center;gap:8px;
+  background:var(--glass);
+  backdrop-filter:blur(var(--blur)) saturate(180%);
+  border:1px solid var(--bdr2);
+  border-radius:999px;
+  padding:6px 10px 6px 14px;
+  box-shadow:0 8px 32px rgba(0,0,0,.35),0 0 0 1px rgba(78,205,196,.05);
+  transition:box-shadow var(--t);
+  max-width:calc(100vw - 32px);
+}
+[data-style="solid"] #navbar{
+  background:var(--bg1);
+  backdrop-filter:none;
+}
+.nav-logo{
+  font-family:'Prompt',sans-serif;
+  font-size:1.15rem;font-weight:800;
+  letter-spacing:-1px;
+  background:var(--acg);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-right:4px;flex-shrink:0;
+}
+.nav-spacer{flex:1}
+.nav-pill{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--bdr);
+  border-radius:999px;padding:5px 12px 5px 8px;
+  font-size:.82rem;color:var(--tx2);
+  cursor:default;flex-shrink:0;
+}
+[data-style="solid"] .nav-pill{background:var(--sur)}
+.nav-ava{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--acg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;font-weight:800;color:#042a28;
+  font-family:'Prompt',sans-serif;flex-shrink:0;
+}
+.nav-admin-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--warn);
+  flex-shrink:0;
+}
+.nav-icon-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;
+  transition:background var(--ts),border-color var(--ts);
+  flex-shrink:0;
+}
+[data-style="solid"] .nav-icon-btn{background:var(--sur)}
+.nav-icon-btn:hover{background:rgba(78,205,196,.1);border-color:var(--ac)}
+
+/* ── BURGER MENU ─── */
+#burgerMenu{
+  position:fixed;top:64px;right:16px;z-index:399;
+  background:var(--glass2);
+  backdrop-filter:blur(32px);
+  border:1px solid var(--bdr2);
+  border-radius:20px;
+  padding:8px;
+  width:200px;
+  box-shadow:0 20px 50px rgba(0,0,0,.4);
+  display:none;
+  animation:scaleIn .2s cubic-bezier(.16,1,.3,1);
+  transform-origin:top right;
+}
+[data-style="solid"] #burgerMenu{background:var(--bg1);backdrop-filter:none}
+#burgerMenu.open{display:block}
+@keyframes scaleIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.bmenu-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:12px;
+  font-size:.88rem;color:var(--tx2);
+  cursor:pointer;
+  transition:background var(--ts),color var(--ts);
+}
+.bmenu-item:hover,.bmenu-item.active{
+  background:rgba(78,205,196,.1);color:var(--ac);
+}
+.bmenu-item .bmi-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.bmenu-sep{height:1px;background:var(--bdr);margin:4px 8px}
+.bmenu-danger{color:var(--red)!important}
+.bmenu-danger:hover{background:rgba(248,113,113,.1)!important;color:var(--red)!important}
+
+/* ══════════════════════════════════
+   PAGES (single scroll)
+══════════════════════════════════ */
+.page{display:none;min-height:100vh;padding-top:80px}
+.page.active{display:block}
+
+/* ══════════════════════════════════
+   LOBBY PAGE
+══════════════════════════════════ */
+/* Billboard */
+#billboard{
+  position:relative;
+  width:100%;height:56vw;max-height:580px;min-height:280px;
+  overflow:hidden;
+}
+.banner-slide{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:opacity 1.2s cubic-bezier(.4,0,.2,1);
+  opacity:0;
+}
+.banner-slide.active{opacity:1}
+.banner-slide.prev{opacity:0}
+/* Fade bottom */
+#billboard::after{
+  content:'';
+  position:absolute;inset:0;bottom:0;
+  background:linear-gradient(to bottom,
+    transparent 40%,
+    rgba(8,12,16,.6) 70%,
+    var(--bg0) 100%
+  );
+  pointer-events:none;z-index:1;
+}
+.banner-controls{
+  position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+  z-index:2;display:flex;gap:6px;align-items:center;
+}
+.banner-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,.3);
+  transition:all var(--ts);cursor:pointer;
+}
+.banner-dot.active{
+  background:var(--ac);width:20px;border-radius:3px;
+}
+.banner-nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  z-index:2;width:40px;height:40px;border-radius:50%;
+  background:rgba(0,0,0,.4);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.15);
+  color:#fff;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:background var(--ts);
+}
+.banner-nav:hover{background:rgba(0,0,0,.7)}
+.banner-nav.left{left:16px}
+.banner-nav.right{right:16px}
+.admin-banner-btn{
+  position:absolute;top:16px;right:16px;z-index:3;
+  background:rgba(0,0,0,.5);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.2);
+  color:#fff;padding:7px 14px;border-radius:999px;
+  font-size:.8rem;font-family:'Prompt',sans-serif;font-weight:600;
+  display:none;transition:background var(--ts);
+}
+.admin-banner-btn:hover{background:rgba(0,0,0,.75)}
+
+/* Logo 3006 between banner and content */
+.lobby-logo-bridge{
+  position:relative;z-index:2;
+  text-align:center;
+  margin-top:-48px;
+  padding-bottom:4px;
+}
+.bridge-logo{
+  display:inline-block;
+  font-family:'Prompt',sans-serif;
+  font-size:clamp(3.5rem,10vw,7rem);
+  font-weight:800;
+  letter-spacing:-4px;
+  line-height:1;
+  background:linear-gradient(135deg,#4ecdc4 0%,#a8e6df 50%,#4ecdc4 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:none;
+  filter:drop-shadow(0 0 40px rgba(78,205,196,.3));
+}
+.bridge-sub{
+  font-size:.8rem;color:var(--tx3);letter-spacing:2px;
+  text-transform:uppercase;margin-top:4px;
 }
 
-/* Lite Mode (No Animations/Effects) */
-body.lite-mode * {
-  animation: none !important;
-  transition: none !important;
-  backdrop-filter: none !important;
+/* Lobby Content */
+.lobby-content{max-width:900px;margin:0 auto;padding:0 16px 80px}
+
+/* Brief / Announcements */
+.section-title{
+  font-family:'Prompt',sans-serif;
+  font-size:1rem;font-weight:700;
+  color:var(--tx);letter-spacing:.5px;
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
 }
-body.lite-mode #bg-canvas { display: none !important; }
+.section-title span{
+  font-size:.72rem;font-weight:500;color:var(--tx3);
+  background:var(--sur);border:1px solid var(--bdr);
+  border-radius:999px;padding:2px 10px;
+}
+.brief-list{display:flex;flex-direction:column;gap:10px}
+.brief-card{
+  background:var(--card);
+  border:1px solid var(--bdr);
+  border-radius:var(--r2);
+  padding:16px 18px;
+  position:relative;
+  transition:border-color var(--ts),transform var(--ts);
+}
+.brief-card:hover{border-color:var(--bdr2);transform:translateY(-1px)}
+.brief-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.brief-title{font-family:'Prompt',sans-serif;font-size:.9rem;font-weight:600;margin-bottom:5px}
+.brief-body{font-size:.84rem;color:var(--tx2);line-height:1.65}
+.brief-meta{font-size:.72rem;color:var(--tx3);margin-top:8px}
+.brief-tag{
+  font-size:.68rem;font-family:'Prompt',sans-serif;font-weight:600;
+  padding:2px 9px;border-radius:999px;flex-shrink:0;
+}
+.brief-tag.info{background:rgba(96,165,250,.15);color:var(--blue);border:1px solid rgba(96,165,250,.2)}
+.brief-tag.warn{background:rgba(251,191,36,.12);color:var(--warn);border:1px solid rgba(251,191,36,.2)}
+.brief-tag.em{background:rgba(110,231,183,.12);color:var(--em);border:1px solid rgba(110,231,183,.2)}
+.brief-del-btn{
+  position:absolute;top:14px;right:14px;
+  background:none;border:none;color:var(--red);
+  font-size:.78rem;opacity:.5;transition:opacity var(--ts);
+}
+.brief-del-btn:hover{opacity:1}
+.brief-empty{text-align:center;padding:40px;color:var(--tx3);font-size:.88rem}
 
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'IBM Plex Sans Thai', sans-serif;
-  background: var(--bg);
-  background-image: radial-gradient(circle at top center, rgba(40,30,15,0.4) 0%, var(--bg) 100%);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+/* Progress Section */
+.progress-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.prog-card{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:var(--r2);padding:16px;
+  display:flex;align-items:center;gap:14px;
+  transition:border-color var(--ts);
+}
+.prog-card:hover{border-color:var(--bdr2)}
+.prog-icon{font-size:1.8rem;flex-shrink:0}
+.prog-info{flex:1;min-width:0}
+.prog-name{font-family:'Prompt',sans-serif;font-size:.82rem;font-weight:600;margin-bottom:6px}
+.prog-bar-wrap{display:flex;align-items:center;gap:8px}
+.prog-bar{flex:1;height:4px;background:var(--bg2);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.prog-fill.vid{background:var(--acg)}
+.prog-fill.quiz{background:linear-gradient(90deg,var(--blue),#818cf8)}
+.prog-pct{font-size:.7rem;color:var(--tx3);font-family:'Prompt',sans-serif;font-weight:600;min-width:28px;text-align:right}
+.prog-detail{font-size:.73rem;color:var(--tx3);margin-top:3px}
+
+/* ══════════════════════════════════
+   LIBRARY PAGE
+══════════════════════════════════ */
+.lib-page{max-width:1100px;margin:0 auto;padding:0 16px 80px}
+.lib-header{
+  text-align:center;padding:24px 0 32px;
+}
+.lib-header h1{
+  font-family:'Prompt',sans-serif;
+  font-size:clamp(2rem,6vw,3.5rem);
+  font-weight:800;letter-spacing:-2px;
+  background:var(--acg);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.lib-header p{color:var(--tx3);font-size:.88rem;margin-top:6px}
+
+.subject-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.subj-card{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:var(--r);padding:24px 16px 20px;
+  text-align:center;cursor:pointer;
+  position:relative;overflow:hidden;
+  transition:transform var(--t),border-color var(--t),box-shadow var(--t);
+}
+[data-style="glass"] .subj-card{
+  background:rgba(26,34,50,.5);backdrop-filter:blur(8px);
+}
+.subj-card::before{
+  content:'';position:absolute;inset:0;bottom:auto;
+  height:2px;border-radius:var(--r) var(--r) 0 0;
+  background:var(--acg);opacity:.5;transition:opacity var(--ts);
+}
+.subj-card:hover{transform:translateY(-6px);border-color:var(--ac);box-shadow:0 20px 40px rgba(0,0,0,.4),0 0 0 1px rgba(78,205,196,.1)}
+.subj-card:hover::before{opacity:1}
+.subj-icon{font-size:2.2rem;margin-bottom:10px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+.subj-name{font-family:'Prompt',sans-serif;font-size:.88rem;font-weight:700;color:var(--tx)}
+.subj-count{font-size:.72rem;color:var(--ac);margin-top:5px;opacity:.8}
+
+/* Class table */
+.tbl-section{margin-top:40px}
+.search-wrap{position:relative;margin-bottom:12px}
+.search-wrap::before{content:'⌕';position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--tx3);font-size:1.1rem;pointer-events:none}
+.search{
+  width:100%;padding:11px 16px 11px 40px;
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:12px;color:var(--tx);font-size:.88rem;
+  transition:border-color var(--ts);
+}
+.search:focus{border-color:var(--ac)}
+.search::placeholder{color:var(--tx3)}
+.tbl-wrap{border-radius:var(--r2);border:1px solid var(--bdr);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--sur)}
+th{padding:11px 16px;text-align:left;font-family:'Prompt',sans-serif;font-size:.72rem;color:var(--tx3);font-weight:600;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap}
+td{padding:10px 16px;font-size:.86rem;border-top:1px solid var(--bdr);transition:background var(--ts)}
+tr:hover td{background:rgba(78,205,196,.04)}
+.td-no{color:var(--tx3);font-size:.8rem}
+.td-id{font-family:'Prompt',sans-serif;font-weight:700;color:var(--ac)}
+.tr-admin td{background:rgba(78,205,196,.04)}
+
+/* ══════════════════════════════════
+   COMMUNITY PAGE
+══════════════════════════════════ */
+.comm-page{max-width:720px;margin:0 auto;padding:0 16px 80px}
+.comm-header{text-align:center;padding:24px 0 28px}
+.comm-header h1{
+  font-family:'Prompt',sans-serif;font-size:clamp(1.8rem,5vw,2.8rem);
+  font-weight:800;letter-spacing:-1.5px;
+  background:var(--acg);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.comm-compose{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:var(--r);padding:16px 18px;
+  margin-bottom:20px;
+}
+.comm-compose textarea{
+  width:100%;background:transparent;border:none;
+  color:var(--tx);font-size:.9rem;line-height:1.6;
+  resize:none;min-height:72px;
+}
+.comm-compose textarea::placeholder{color:var(--tx3)}
+.comm-compose-footer{
+  display:flex;justify-content:flex-end;align-items:center;
+  gap:10px;margin-top:12px;padding-top:10px;
+  border-top:1px solid var(--bdr);
+}
+.char-count{font-size:.75rem;color:var(--tx3)}
+.post-btn{
+  background:var(--acg);color:#042a28;
+  padding:8px 20px;border-radius:999px;
+  font-size:.84rem;font-weight:700;font-family:'Prompt',sans-serif;
+  transition:opacity var(--ts),transform var(--ts);
+}
+.post-btn:hover{opacity:.85;transform:translateY(-1px)}
+
+.comm-feed{display:flex;flex-direction:column;gap:10px}
+.comm-post{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:var(--r2);padding:16px 18px;
+  transition:border-color var(--ts);
+}
+.comm-post:hover{border-color:var(--bdr2)}
+.comm-post-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.comm-ava{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--acg);display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;font-weight:800;color:#042a28;font-family:'Prompt',sans-serif;flex-shrink:0;
+}
+.comm-name{font-family:'Prompt',sans-serif;font-size:.88rem;font-weight:700}
+.comm-time{font-size:.73rem;color:var(--tx3);margin-left:auto}
+.comm-text{font-size:.88rem;color:var(--tx2);line-height:1.7}
+.comm-actions{display:flex;gap:12px;margin-top:12px;padding-top:10px;border-top:1px solid var(--bdr)}
+.comm-like-btn{
+  background:none;border:none;color:var(--tx3);
+  font-size:.8rem;display:flex;align-items:center;gap:5px;
+  transition:color var(--ts);padding:0;
+}
+.comm-like-btn:hover{color:var(--ac)}
+.comm-like-btn.liked{color:var(--ac)}
+.comm-del-btn{
+  background:none;border:none;color:var(--tx3);
+  font-size:.8rem;margin-left:auto;
+  transition:color var(--ts);padding:0;
+}
+.comm-del-btn:hover{color:var(--red)}
+
+/* ══════════════════════════════════
+   SETTINGS PAGE
+══════════════════════════════════ */
+.settings-page{max-width:600px;margin:0 auto;padding:0 16px 80px}
+.settings-header{text-align:center;padding:24px 0 28px}
+.settings-header h1{
+  font-family:'Prompt',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-1px;
+  background:var(--acg);-webkit-background-clip:text;background-clip:text;color:transparent;
 }
 
-/* ── BACKGROUND MESH ─────────────────────────────── */
-#bg-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
-body::before {
-  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
-  background-image: linear-gradient(rgba(212,175,55,.02) 1px,transparent 1px), linear-gradient(90deg,rgba(212,175,55,.02) 1px,transparent 1px);
-  background-size: 60px 60px;
+.settings-section{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:var(--r);padding:6px 0;margin-bottom:12px;
+  overflow:hidden;
+}
+.settings-section-title{
+  font-family:'Prompt',sans-serif;font-size:.72rem;font-weight:700;
+  color:var(--tx3);letter-spacing:1px;text-transform:uppercase;
+  padding:12px 18px 8px;
+}
+.settings-row{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 18px;
+  transition:background var(--ts);
+}
+.settings-row:hover{background:rgba(78,205,196,.04)}
+.settings-row + .settings-row{border-top:1px solid var(--bdr)}
+.settings-icon{font-size:1.1rem;width:24px;text-align:center;flex-shrink:0}
+.settings-label{font-size:.88rem;flex:1}
+.settings-hint{font-size:.76rem;color:var(--tx3);margin-top:1px}
+.settings-label-wrap{flex:1}
+
+/* Toggle switch */
+.toggle{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{
+  position:absolute;inset:0;border-radius:999px;
+  background:var(--sur);border:1px solid var(--bdr2);
+  cursor:pointer;transition:background var(--ts);
+}
+.toggle input:checked ~ .toggle-track{background:var(--ac3)}
+.toggle-thumb{
+  position:absolute;top:3px;left:3px;
+  width:16px;height:16px;border-radius:50%;
+  background:#fff;cursor:pointer;
+  transition:transform var(--ts);
+  box-shadow:0 1px 3px rgba(0,0,0,.3);
+}
+.toggle input:checked ~ .toggle-thumb{transform:translateX(18px)}
+
+/* Segmented control */
+.seg{display:flex;gap:2px;background:var(--sur);border:1px solid var(--bdr);border-radius:999px;padding:3px;flex-shrink:0}
+.seg-btn{
+  padding:5px 12px;border-radius:999px;font-size:.78rem;font-weight:600;
+  font-family:'Prompt',sans-serif;color:var(--tx3);
+  transition:all var(--ts);
+}
+.seg-btn.active{background:var(--ac3);color:#fff}
+
+.settings-input{
+  width:100%;padding:8px 12px;
+  background:var(--sur);border:1px solid var(--bdr);
+  border-radius:10px;color:var(--tx);font-size:.88rem;
+  margin-top:8px;transition:border-color var(--ts);
+}
+.settings-input:focus{border-color:var(--ac)}
+.settings-save-btn{
+  background:var(--acg);color:#042a28;
+  padding:8px 20px;border-radius:999px;
+  font-size:.84rem;font-weight:700;font-family:'Prompt',sans-serif;
+  margin-top:8px;transition:opacity var(--ts);
+}
+.settings-save-btn:hover{opacity:.85}
+.btn-logout-full{
+  width:100%;padding:13px;border-radius:12px;
+  background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);
+  color:var(--red);font-size:.9rem;font-weight:700;font-family:'Prompt',sans-serif;
+  transition:all var(--ts);
+}
+.btn-logout-full:hover{background:rgba(248,113,113,.2)}
+
+/* ══════════════════════════════════
+   SUBJECT MODAL
+══════════════════════════════════ */
+#overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:450;
+  display:none;align-items:flex-start;justify-content:center;
+  padding:24px 12px;overflow-y:auto;
+  backdrop-filter:blur(8px);
+}
+#overlay.open{display:flex}
+.modal{
+  background:var(--glass2);
+  backdrop-filter:blur(32px);
+  border:1px solid var(--bdr2);
+  border-radius:24px;
+  width:min(840px,100%);
+  margin:auto;
+  animation:floatUp .3s cubic-bezier(.16,1,.3,1);
+}
+[data-style="solid"] .modal{background:var(--bg1);backdrop-filter:none}
+.modal-hd{
+  padding:22px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--bdr);
+}
+.modal-title{font-family:'Prompt',sans-serif;font-size:1.2rem;font-weight:700}
+.modal-close{
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,.06);border:1px solid var(--bdr);
+  color:var(--tx2);font-size:.9rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:all var(--ts);
+}
+.modal-close:hover{background:rgba(248,113,113,.1);border-color:var(--red);color:var(--red)}
+.modal-body{padding:20px 24px 28px}
+
+/* Admin panel inside modal */
+.admin-strip{
+  background:rgba(78,205,196,.05);
+  border:1px solid rgba(78,205,196,.15);
+  border-radius:var(--r2);padding:16px 18px;margin-bottom:18px;
+}
+.admin-strip-title{
+  font-family:'Prompt',sans-serif;font-size:.82rem;font-weight:700;
+  color:var(--ac);margin-bottom:12px;display:flex;align-items:center;gap:6px;
 }
 
-/* ── 3D GOLD TEXT GRADIENTS ──────────────────────── */
-.grad-text, h1, h2, .modal-title {
-  background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+/* Tabs */
+.tabs2{display:flex;gap:3px;background:var(--sur);border:1px solid var(--bdr);border-radius:12px;padding:3px;margin-bottom:18px}
+.tab2{flex:1;padding:8px;border-radius:10px;font-size:.83rem;font-weight:600;font-family:'Prompt',sans-serif;color:var(--tx3);transition:all var(--ts)}
+.tab2.on{background:var(--card2);color:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+
+/* Video source tabs */
+.vsrc-tabs{display:flex;gap:6px;margin-bottom:10px}
+.vsrc-btn{
+  flex:1;padding:8px 10px;border-radius:10px;
+  border:1px solid var(--bdr);background:transparent;
+  color:var(--tx3);font-size:.8rem;font-weight:600;font-family:'Prompt',sans-serif;
+  transition:all var(--ts);
 }
+.vsrc-btn.on{background:rgba(78,205,196,.1);border-color:var(--ac);color:var(--ac)}
 
-/* ── 3D CONTAINERS & CARDS (GLASSMORPHISM) ───────── */
-.glass-panel {
-  background: var(--surface);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid var(--border);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.05);
-  border-radius: var(--r);
+/* Form fields */
+.aform{display:grid;gap:9px}
+.af-input{
+  width:100%;padding:10px 13px;
+  background:rgba(0,0,0,.25);border:1px solid var(--bdr);
+  border-radius:10px;color:var(--tx);font-size:.88rem;
+  transition:border-color var(--ts);
 }
+[data-theme="light"] .af-input{background:rgba(0,0,0,.04)}
+.af-input:focus{border-color:var(--ac)}
+.af-input::placeholder{color:var(--tx3)}
+.af-textarea{resize:vertical;min-height:70px}
 
-/* ── 3D GOLD BUTTONS ─────────────────────────────── */
-.gold-btn {
-  background: linear-gradient(145deg, var(--a), var(--a3)) !important;
-  color: #000 !important;
-  font-family: 'Kanit', sans-serif;
-  font-weight: 800 !important;
-  text-shadow: 0 1px 1px rgba(255,255,255,0.3);
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.4), inset 2px 2px 5px rgba(255,255,255,0.4), inset -2px -2px 5px rgba(0,0,0,0.2) !important;
-  border: 1px solid #ffdf00 !important;
-  transition: all 0.2s cubic-bezier(.34,1.56,.64,1) !important;
-  border-radius: 10px;
-  cursor: pointer;
-  padding: 12px 20px;
-  text-align: center;
+/* Dropzone */
+.dropzone{
+  display:block;border:2px dashed var(--bdr2);
+  border-radius:var(--r2);padding:22px;text-align:center;
+  cursor:pointer;transition:all var(--ts);
+  background:rgba(0,0,0,.15);
 }
-.gold-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 6px 6px 15px rgba(0,0,0,0.6), inset 2px 2px 5px rgba(255,255,255,0.5), inset -2px -2px 5px rgba(0,0,0,0.2) !important;
+.dropzone:hover,.dropzone.drag{border-color:var(--ac);background:rgba(78,205,196,.05)}
+.dz-icon{font-size:2rem;margin-bottom:6px}
+.dz-label{font-family:'Prompt',sans-serif;font-size:.88rem;color:var(--tx2)}
+.dz-sub{font-size:.74rem;color:var(--tx3);margin-top:3px}
+#filePreview{display:none;margin-top:10px}
+#filePreview video{width:100%;border-radius:10px;background:#000;max-height:180px;border:1px solid var(--bdr)}
+.fp-name{font-size:.74rem;color:var(--tx3);text-align:center;margin-top:5px}
+.btn-clear-file{background:none;border:none;color:var(--red);font-size:.76rem;cursor:pointer;display:block;margin:4px auto 0}
+.prog-wrap2{display:none;margin-top:6px}
+.prog-bar2{height:4px;background:var(--sur);border-radius:2px;overflow:hidden}
+.prog-fill2{height:100%;background:var(--acg);width:0;transition:width .3s}
+.prog-txt2{font-size:.73rem;color:var(--tx3);margin-top:5px;text-align:center}
+
+.btn-admin{
+  padding:9px 18px;border-radius:10px;
+  background:var(--acg);color:#042a28;
+  font-size:.85rem;font-weight:700;font-family:'Prompt',sans-serif;
+  transition:opacity var(--ts),transform var(--ts);
+  align-self:start;
 }
-.gold-btn:active {
-  transform: translateY(2px);
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.8), inset 2px 2px 5px rgba(0,0,0,0.2), inset -2px -2px 5px rgba(255,255,255,0.2) !important;
+.btn-admin:hover{opacity:.85;transform:translateY(-1px)}
+.btn-add-q{
+  width:100%;padding:10px;border-radius:10px;
+  background:transparent;border:1px dashed var(--bdr2);
+  color:var(--ac);font-size:.84rem;font-family:'Prompt',sans-serif;
+  transition:all var(--ts);
 }
+.btn-add-q:hover{border-color:var(--ac);background:rgba(78,205,196,.05)}
 
-/* ── INPUT FIELDS (DEEP EMBOSSED) ────────────────── */
-.input-3d {
-  width: 100%; padding: 12px 16px;
-  background: rgba(0,0,0,0.6) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--white) !important;
-  border-radius: 10px;
-  font-family: 'IBM Plex Sans Thai', sans-serif; font-size: 0.95rem;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5) !important;
-  transition: all .2s !important;
-  outline: none;
+/* Video grid */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.vcard{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:var(--r2);overflow:hidden;cursor:pointer;
+  transition:transform var(--ts),border-color var(--ts),box-shadow var(--ts);
 }
-body.light-theme .input-3d { background: rgba(255,255,255,0.5) !important; color: #000 !important; }
-.input-3d:focus {
-  border-color: var(--a) !important;
-  box-shadow: 0 0 0 2px rgba(212,175,55,0.3), inset 0 2px 4px rgba(0,0,0,0.5) !important;
+.vcard:hover{transform:translateY(-4px);border-color:var(--ac);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.vthumb{width:100%;aspect-ratio:16/9;background:var(--bg2);position:relative;overflow:hidden}
+.vthumb img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.vcard:hover .vthumb img{transform:scale(1.05)}
+.vplay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;transition:background var(--ts)}
+.vcard:hover .vplay{background:rgba(0,0,0,.25)}
+.vplay-btn{
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(78,205,196,.2);backdrop-filter:blur(8px);
+  border:1px solid rgba(78,205,196,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;color:var(--ac2);
+  transition:transform var(--ts),background var(--ts);
 }
+.vcard:hover .vplay-btn{transform:scale(1.1);background:rgba(78,205,196,.4)}
+.vinfo{padding:11px 12px}
+.vtitle{font-family:'Prompt',sans-serif;font-size:.84rem;font-weight:700;margin-bottom:4px;line-height:1.35}
+.vmeta{font-size:.72rem;color:var(--tx3);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.vbadge{font-size:.65rem;padding:2px 7px;border-radius:999px;font-family:'Prompt',sans-serif;font-weight:700}
+.vbadge.yt{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.2)}
+.vbadge.file{background:rgba(78,205,196,.12);color:var(--ac);border:1px solid rgba(78,205,196,.2)}
+.btn-del{background:none;border:none;color:var(--red);font-size:.74rem;cursor:pointer;opacity:.6;transition:opacity var(--ts);padding:0}
+.btn-del:hover{opacity:1}
+.empty-state{text-align:center;padding:44px;color:var(--tx3)}
+.empty-icon{font-size:2.8rem;margin-bottom:10px;opacity:.4}
 
-/* ── LOGIN PAGE ──────────────────────────────────── */
-#loginPage { position:fixed; inset:0; z-index:2000; display:flex; align-items:center; justify-content:center; background: radial-gradient(circle at center, #1a1712 0%, #050403 100%); }
-.login-box { width: min(400px, 90vw); padding: 40px; text-align: center; }
-.login-logo { font-size: 3.5rem; font-family: 'Kanit', sans-serif; font-weight: 900; letter-spacing: -2px; margin-bottom: 5px; }
-.login-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 30px; }
-.login-err { color: var(--red); font-size: 0.85rem; margin-top: 15px; display: none; }
-
-/* ── FLOATING NAVBAR (IPHONE STYLE) ──────────────── */
-#floating-nav {
-  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-  width: 90%; max-width: 500px; height: 60px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 20px; z-index: 1000;
-  border-radius: 30px;
-  background: var(--surface);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  transition: all 0.3s;
+/* Quiz */
+.qlist2{display:flex;flex-direction:column;gap:8px}
+.qitem2{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:12px;padding:14px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;transition:border-color var(--ts);
 }
-.nav-logo { font-family: 'Kanit', sans-serif; font-size: 1.5rem; font-weight: 900; letter-spacing: -1px; cursor: pointer; }
-.nav-right { display: flex; align-items: center; gap: 12px; }
-.nav-user { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; color: var(--text); }
-.ava { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--a), var(--a3)); display: flex; align-items: center; justify-content: center; color: #000; font-family: 'Kanit', sans-serif; font-weight: 800; }
-.burger-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); color: var(--a); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: all 0.2s; }
-.burger-btn:active { transform: scale(0.9); }
-
-/* ── BURGER MENU OVERLAY ─────────────────────────── */
-#menu-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-  z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+.qitem2:hover{border-color:var(--bdr2)}
+.q-name{font-family:'Prompt',sans-serif;font-size:.88rem;font-weight:700}
+.q-meta{font-size:.74rem;color:var(--tx3);margin-top:2px}
+.btn-start2{
+  background:linear-gradient(135deg,var(--blue),#818cf8);
+  color:#fff;padding:7px 16px;border-radius:8px;
+  font-size:.8rem;font-weight:700;font-family:'Prompt',sans-serif;
+  flex-shrink:0;transition:opacity var(--ts);
 }
-#menu-overlay.active { opacity: 1; pointer-events: all; }
-.menu-close { position: absolute; top: 30px; right: 30px; font-size: 2rem; color: var(--a); cursor: pointer; }
-.menu-item { font-family: 'Kanit', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--white); margin: 15px 0; cursor: pointer; transition: all 0.2s; text-transform: uppercase; }
-.menu-item:hover { color: var(--a); transform: scale(1.1); text-shadow: 0 0 20px var(--glow); }
+.btn-start2:hover{opacity:.85}
 
-/* ── APP VIEWS ───────────────────────────────────── */
-#app { display: none; position: relative; z-index: 1; padding-top: 100px; padding-bottom: 80px; }
-.view-section { display: none; max-width: 1180px; margin: 0 auto; padding: 0 20px; animation: fadeUp 0.5s ease; }
-.view-section.active { display: block; }
-
-/* ── LOBBY VIEW ──────────────────────────────────── */
-#view-lobby { text-align: center; }
-.billboard-container {
-  position: relative; width: 100%; height: 400px; border-radius: 20px; overflow: hidden; margin-bottom: -50px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid var(--border);
+/* Quiz play */
+#quizPlay2{display:none}
+.qback2{
+  background:var(--sur);border:1px solid var(--bdr);
+  color:var(--tx2);padding:6px 12px;border-radius:8px;
+  font-size:.82rem;font-family:'Sarabun',sans-serif;transition:all var(--ts);
 }
-.billboard-slide { position: absolute; inset: 0; background-size: cover; background-position: center; transition: opacity 1s; opacity: 0; }
-.billboard-slide.active { opacity: 1; }
-.billboard-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, var(--bg) 100%); }
+.qback2:hover{border-color:var(--ac);color:var(--ac)}
+.qpbar-wrap{height:4px;background:var(--sur);border-radius:2px;overflow:hidden;margin:10px 0 16px}
+.qpbar-fill{height:100%;background:var(--acg);width:0;transition:width .4s;border-radius:2px}
+.qbox2{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:var(--r2);padding:22px;margin-bottom:12px;
+}
+.qtext2{font-family:'Prompt',sans-serif;font-size:1rem;font-weight:600;color:var(--tx);margin-bottom:18px;line-height:1.5}
+.opts-grid2{display:grid;gap:8px}
+.obtn2{
+  width:100%;text-align:left;padding:12px 15px;
+  background:rgba(0,0,0,.2);border:1px solid var(--bdr);
+  border-radius:10px;color:var(--tx);font-size:.88rem;
+  cursor:pointer;transition:all var(--ts);
+}
+[data-theme="light"] .obtn2{background:var(--bg2)}
+.obtn2:hover{border-color:var(--ac);background:rgba(78,205,196,.06)}
+.obtn2.correct{border-color:var(--em);background:rgba(110,231,183,.1);color:var(--em)}
+.obtn2.wrong{border-color:var(--red);background:rgba(248,113,113,.08);color:var(--red)}
 
-.lobby-logo { position: relative; z-index: 10; font-family: 'Kanit', sans-serif; font-size: clamp(5rem, 12vw, 9rem); font-weight: 900; letter-spacing: -5px; line-height: 1; margin-bottom: 20px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); }
-.brief-section { margin-top: 40px; text-align: left; }
-.brief-card { padding: 20px; margin-bottom: 15px; border-left: 4px solid var(--a); }
-.brief-meta { font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; }
-.brief-text { font-size: 0.95rem; line-height: 1.6; }
+.result-box2{text-align:center;padding:28px 16px}
+.score-ring2{
+  width:120px;height:120px;border-radius:50%;
+  background:conic-gradient(var(--ac) var(--p,0%),var(--sur) 0);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;
+}
+.score-inner2{
+  width:90px;height:90px;border-radius:50%;
+  background:var(--card);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.score-num2{font-family:'Prompt',sans-serif;font-size:1.4rem;font-weight:800;color:var(--ac2)}
+.score-lbl2{font-size:.68rem;color:var(--tx3)}
+.score-msg2{font-family:'Prompt',sans-serif;font-size:1.1rem;margin-bottom:5px}
+.score-det2{color:var(--tx3);font-size:.86rem;margin-bottom:20px}
 
-.progress-section { margin-top: 40px; text-align: left; }
-.prog-container { margin-bottom: 20px; }
-.prog-label { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: var(--a2); }
-.prog-track { height: 8px; background: rgba(0,0,0,0.5); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
-.prog-fill { height: 100%; background: linear-gradient(90deg, var(--a), var(--a2)); width: 0%; transition: width 1s ease; box-shadow: 0 0 10px var(--a); }
+/* Quiz form rows */
+.qrow{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:13px;display:grid;gap:8px}
+.qrow-hd{display:flex;justify-content:space-between;align-items:center;font-size:.76rem;color:var(--ac);font-family:'Prompt',sans-serif}
+.btn-rm{background:none;border:none;color:var(--red);font-size:.82rem;cursor:pointer;padding:0}
+.opts2grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.opt-row{display:flex;align-items:center;gap:6px}
+.opt-row input[type=radio]{accent-color:var(--ac)}
+.opt-input{flex:1;padding:7px 10px;border-radius:8px;background:rgba(0,0,0,.2);border:1px solid var(--bdr);color:var(--tx);font-size:.82rem;outline:none;transition:border-color var(--ts)}
+[data-theme="light"] .opt-input{background:rgba(0,0,0,.04)}
+.opt-input:focus{border-color:var(--ac)}
 
-/* ── COMMUNITY VIEW ──────────────────────────────── */
-.chat-container { height: 60vh; display: flex; flex-direction: column; }
-.chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-.chat-msg { max-width: 80%; padding: 12px 16px; border-radius: 16px; background: var(--card2); border: 1px solid var(--border); align-self: flex-start; }
-.chat-msg.mine { align-self: flex-end; background: rgba(212,175,55,0.1); border-color: var(--a); }
-.chat-author { font-size: 0.7rem; color: var(--a); font-weight: 700; margin-bottom: 4px; font-family: 'Kanit', sans-serif; }
-.chat-text { font-size: 0.9rem; line-height: 1.5; }
-.chat-time { font-size: 0.65rem; color: var(--muted); margin-top: 5px; text-align: right; }
-.chat-input-area { display: flex; gap: 10px; padding: 15px; border-top: 1px solid var(--border); background: var(--surface); border-radius: 0 0 var(--r) var(--r); }
+/* Video overlay */
+#vidOverlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:600;
+  display:none;align-items:center;justify-content:center;
+  padding:20px;backdrop-filter:blur(20px);
+}
+#vidOverlay.open{display:flex}
+.vid-box{width:min(900px,100%);position:relative;animation:floatUp .25s ease}
+.vid-label-top{position:absolute;top:-44px;left:0;font-family:'Prompt',sans-serif;font-size:.9rem;font-weight:700;max-width:calc(100% - 50px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.vid-close{position:absolute;top:-44px;right:0;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--bdr2);color:var(--tx2);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;transition:all var(--ts)}
+.vid-close:hover{background:rgba(248,113,113,.15);border-color:var(--red);color:var(--red)}
+.yt-wrap{position:relative;padding-bottom:56.25%;height:0;border-radius:var(--r);overflow:hidden;background:#000;border:1px solid var(--bdr)}
+.yt-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.file-vid{width:100%;border-radius:var(--r);background:#000;max-height:80vh;display:block;border:1px solid var(--bdr)}
 
-/* ── SETTINGS VIEW ───────────────────────────────── */
-.setting-row { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--border); }
-.setting-label { font-size: 0.95rem; font-weight: 600; }
-.toggle-switch { position: relative; width: 50px; height: 26px; background: rgba(0,0,0,0.5); border-radius: 13px; border: 1px solid var(--border); cursor: pointer; transition: all 0.3s; }
-.toggle-switch.on { background: var(--a); }
-.toggle-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: var(--white); border-radius: 50%; transition: all 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-.toggle-switch.on .toggle-knob { left: 26px; }
+/* Banner modal */
+#bannerModal{
+  position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:700;
+  display:none;align-items:center;justify-content:center;
+  padding:20px;backdrop-filter:blur(12px);
+}
+#bannerModal.open{display:flex}
+.banner-modal-box{
+  background:var(--glass2);backdrop-filter:blur(32px);
+  border:1px solid var(--bdr2);border-radius:24px;
+  padding:28px;width:min(500px,100%);
+  animation:floatUp .3s cubic-bezier(.16,1,.3,1);
+}
+[data-style="solid"] .banner-modal-box{background:var(--bg1);backdrop-filter:none}
+.banner-modal-title{font-family:'Prompt',sans-serif;font-size:1rem;font-weight:700;margin-bottom:16px}
+.banner-url-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;max-height:200px;overflow-y:auto}
+.banner-url-item{
+  display:flex;align-items:center;gap:8px;
+  background:var(--sur);border:1px solid var(--bdr);
+  border-radius:9px;padding:8px 12px;
+  font-size:.8rem;color:var(--tx2);
+}
+.banner-url-item .bui-del{
+  background:none;border:none;color:var(--red);
+  font-size:.8rem;cursor:pointer;margin-left:auto;flex-shrink:0;opacity:.7;transition:opacity var(--ts);
+}
+.banner-url-item .bui-del:hover{opacity:1}
+.banner-url-item .bui-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* ── ORIGINAL LIBRARY STYLES (Kept & Merged) ─────── */
-.sh { display:flex; align-items:center; gap:14px; margin:30px 0 18px; }
-.sh h2 { font-family:'Kanit',sans-serif; font-size:1.2rem; font-weight:800; }
-.sh-line { flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
-.subjects { display:grid; grid-template-columns:repeat(auto-fill,minmax(165px,1fr)); gap:15px; }
-.sc { position:relative; padding:24px 16px 20px; text-align:center; cursor:pointer; overflow:hidden; transition:transform .3s; }
-.sc::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--a),var(--a2),var(--a3)); }
-.sc:hover { transform:translateY(-5px); border-color:var(--a2); box-shadow: 0 20px 40px rgba(0,0,0,0.9); }
-.sc-icon { font-size:2.5rem; margin-bottom:12px; display:block; filter:drop-shadow(0 4px 6px rgba(0,0,0,.8)); }
-.sc-name { font-family:'Kanit',sans-serif; font-size:.95rem; font-weight:700; color:var(--white); }
-.sc-count { font-size:.75rem; color:var(--a); margin-top:5px; }
+/* Brief post modal */
+#briefModal{
+  position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:700;
+  display:none;align-items:center;justify-content:center;
+  padding:20px;backdrop-filter:blur(12px);
+}
+#briefModal.open{display:flex}
+.brief-modal-box{
+  background:var(--glass2);backdrop-filter:blur(32px);
+  border:1px solid var(--bdr2);border-radius:24px;
+  padding:28px;width:min(480px,100%);
+  animation:floatUp .3s cubic-bezier(.16,1,.3,1);
+}
+[data-style="solid"] .brief-modal-box{background:var(--bg1);backdrop-filter:none}
 
-.tbl-wrap { overflow:hidden; margin-top: 15px; }
-table { width:100%; border-collapse:collapse; }
-thead tr { background:rgba(0,0,0,0.4); }
-th { padding:12px; text-align:left; font-family:'Kanit',sans-serif; font-size:.75rem; color:var(--a); font-weight:600; letter-spacing:1px; text-transform:uppercase; }
-td { padding:12px; font-size:.85rem; border-top:1px solid var(--border); }
-tr:hover td { background:rgba(212,175,55,.05); }
-.tr-admin td { background:rgba(212,175,55,.1); }
+/* Toast */
+#toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(10px);
+  z-index:9999;padding:11px 22px;border-radius:999px;
+  font-family:'Prompt',sans-serif;font-size:.84rem;font-weight:600;
+  opacity:0;transition:all var(--ts);pointer-events:none;
+  white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.ok{background:var(--acg);color:#042a28;box-shadow:0 8px 24px rgba(78,205,196,.3)}
+#toast.err{background:linear-gradient(135deg,var(--red),#dc2626);color:#fff;box-shadow:0 8px 24px rgba(248,113,113,.3)}
 
-/* Overlays & Modals */
-.overlay { position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:3000; display:none; align-items:flex-start; justify-content:center; padding:28px 14px; overflow-y:auto; backdrop-filter:blur(10px); }
-.overlay.open { display:flex; }
-.modal { width:min(820px,100%); margin:auto; animation:fadeUp .3s ease; }
-.modal-hd { padding:24px 28px 16px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); }
-.modal-close { width:34px; height:34px; border-radius:8px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.modal-body { padding:22px 28px 30px; }
+/* Section spacers */
+.lobby-sect{margin-bottom:32px}
 
-.tabs { display:flex; gap:5px; background:rgba(0,0,0,0.4); border-radius:12px; padding:4px; margin-bottom:20px; border:1px solid var(--border); }
-.tab { flex:1; padding:10px; border:none; border-radius:8px; background:transparent; color:var(--muted); font-family:'Kanit',sans-serif; font-size:.88rem; font-weight:600; cursor:pointer; }
-.tab.on { color:var(--000); }
+/* Animations */
+@keyframes floatUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.fade-in{animation:floatUp .5s cubic-bezier(.16,1,.3,1) both}
 
-.vgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:15px; }
-.vcard { overflow:hidden; cursor:pointer; transition:transform .2s; }
-.vcard:hover { transform:translateY(-5px); border-color:var(--a2); }
-.vthumb { width:100%; aspect-ratio:16/9; background:#000; position:relative; overflow:hidden; }
-.vthumb img { width:100%; height:100%; object-fit:cover; transition:transform .3s; }
-.vcard:hover .vthumb img { transform:scale(1.05); }
-.vplay { position:absolute; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; }
-.vplay-btn { width:48px; height:48px; border-radius:50%; background:rgba(212,175,55,.2); border:1px solid rgba(212,175,55,.5); display:flex; align-items:center; justify-content:center; font-size:1.2rem; color:var(--a2); backdrop-filter:blur(5px); }
-.vinfo { padding:14px; }
-.vtitle { font-family:'Kanit',sans-serif; font-size:.9rem; font-weight:700; margin-bottom:6px; line-height:1.4; }
-.vmeta { font-size:.7rem; color:var(--muted); display:flex; align-items:center; justify-content:space-between; }
-.vbadge { padding:3px 8px; border-radius:999px; font-family:'Kanit',sans-serif; font-weight:700; background:rgba(212,175,55,.15); color:var(--a2); border:1px solid var(--border); }
+/* Admin floating button (lobby) */
+.admin-lobby-actions{
+  display:flex;gap:8px;justify-content:center;
+  margin-bottom:20px;
+}
+.admin-action-btn{
+  background:rgba(78,205,196,.1);border:1px solid rgba(78,205,196,.2);
+  color:var(--ac);padding:8px 16px;border-radius:999px;
+  font-size:.8rem;font-weight:600;font-family:'Prompt',sans-serif;
+  transition:all var(--ts);display:flex;align-items:center;gap:6px;
+}
+.admin-action-btn:hover{background:rgba(78,205,196,.2);border-color:var(--ac)}
 
-/* Utilities */
-@keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-#toast { position:fixed; bottom:30px; right:30px; z-index:9999; padding:12px 24px; border-radius:10px; font-family:'Kanit',sans-serif; font-size:.9rem; color:#000; font-weight:700; opacity:0; transform:translateY(10px); transition:all .3s; pointer-events:none; border:1px solid #ffdf00; background:var(--gold-grad); box-shadow:0 10px 30px rgba(0,0,0,.8); }
-#toast.show { opacity:1; transform:translateY(0); }
-.empty { text-align:center; padding:40px; color:var(--muted); font-size:0.9rem; }
-
-/* Scrollbar */
-::-webkit-scrollbar { width:6px; height:6px; }
-::-webkit-scrollbar-track { background:var(--bg); }
-::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
-::-webkit-scrollbar-thumb:hover { background:var(--a); }
-
-/* Responsive */
-@media(max-width:600px) {
-  #floating-nav { width: 95%; top: 10px; }
-  #app { padding-top: 80px; }
-  .login-box { padding: 30px 20px; }
-  .modal-body { padding: 15px; }
-  .lobby-logo { font-size: 5rem; }
+@media(max-width:600px){
+  .login-card{padding:36px 22px 32px}
+  .opts2grid{grid-template-columns:1fr}
+  .progress-grid{grid-template-columns:1fr 1fr}
+  .modal-body{padding:16px 16px 24px}
+  .modal-hd{padding:16px 18px}
 }
 </style>
 </head>
-<body>
+<body data-theme="dark" data-style="glass" data-lite="false">
+<canvas id="bgc"></canvas>
 
-<canvas id="bg-canvas"></canvas>
-
+<!-- ══ LOGIN ══════════════════════════════════ -->
 <div id="loginPage">
-  <div class="login-wrap">
-    <div class="glass-panel login-box">
-      <div class="login-logo grad-text">3006</div>
-      <div class="login-sub">Digital Premium Ecosystem</div>
-      
+  <div class="login-scene">
+    <div class="login-glow"></div>
+    <div class="login-card">
+      <div class="login-logo-wrap">
+        <div class="login-logo">3006</div>
+      </div>
+      <div class="login-sub">ม.3/6 · ปีการศึกษา 2569 · Digital &amp; Technology</div>
+      <div class="login-divider"></div>
       <div class="lf">
-        <label>User ID (เลขที่)</label>
-        <input type="number" id="inNo" class="input-3d" placeholder="กรอกเลขที่ (1–35)" min="1" max="35">
+        <label>เลขที่ (Username)</label>
+        <input type="number" id="inNo" placeholder="กรอกเลขที่ของคุณ" min="1" max="35">
       </div>
       <div class="lf">
-        <label>Passcode (รหัสประจำตัว)</label>
-        <input type="password" id="inPass" class="input-3d" placeholder="กรอกรหัสผ่าน">
+        <label>รหัสผ่าน (Password)</label>
+        <input type="password" id="inPass" placeholder="กรอกรหัสประจำตัว">
       </div>
-      
-      <button class="gold-btn" style="width:100%; margin-top:10px;" onclick="doLogin()">Access System</button>
-      <div class="login-err" id="loginErr">❌ Information Incorrect</div>
+      <button class="login-btn" onclick="doLogin()">เข้าสู่ระบบ →</button>
+      <div class="login-err" id="loginErr">❌ เลขที่หรือรหัสผ่านไม่ถูกต้อง</div>
+      <div class="login-hint">Username = เลขที่ · Password = รหัสประจำตัว</div>
     </div>
   </div>
 </div>
 
+<!-- ══ APP ══════════════════════════════════ -->
 <div id="app">
-  
-  <nav id="floating-nav">
-    <div class="nav-logo grad-text" onclick="switchView('lobby')">3006</div>
-    <div class="nav-right">
-      <div class="nav-user"><div class="ava" id="navAva">?</div></div>
-      <div class="burger-btn" onclick="toggleMenu()">☰</div>
+
+  <!-- Floating Navbar -->
+  <nav id="navbar">
+    <div class="nav-logo">3006</div>
+    <div class="nav-spacer"></div>
+    <div class="nav-pill" id="navPill">
+      <div class="nav-ava" id="navAva">?</div>
+      <span id="navName">-</span>
+      <div class="nav-admin-dot" id="navAdminDot" style="display:none"></div>
     </div>
+    <button class="nav-icon-btn" id="burgerBtn" onclick="toggleBurger()" title="เมนู">☰</button>
   </nav>
 
-  <div id="menu-overlay">
-    <div class="menu-close" onclick="toggleMenu()">✕</div>
-    <div class="menu-item grad-text" onclick="switchView('lobby')">Lobby</div>
-    <div class="menu-item grad-text" onclick="switchView('library')">Library</div>
-    <div class="menu-item grad-text" onclick="switchView('community')">Community</div>
-    <div class="menu-item grad-text" onclick="switchView('settings')">Settings</div>
-    <div class="menu-item" style="color:var(--red); font-size:1.5rem; margin-top:40px;" onclick="logout()">Log Out</div>
+  <!-- Burger Menu -->
+  <div id="burgerMenu">
+    <div class="bmenu-item active" id="bm-lobby" onclick="goPage('lobby')">
+      <span class="bmi-icon">🏠</span> Lobby
+    </div>
+    <div class="bmenu-item" id="bm-library" onclick="goPage('library')">
+      <span class="bmi-icon">📚</span> Library
+    </div>
+    <div class="bmenu-item" id="bm-community" onclick="goPage('community')">
+      <span class="bmi-icon">💬</span> Community
+    </div>
+    <div class="bmenu-sep"></div>
+    <div class="bmenu-item" id="bm-settings" onclick="goPage('settings')">
+      <span class="bmi-icon">⚙️</span> Settings
+    </div>
+    <div class="bmenu-sep"></div>
+    <div class="bmenu-item bmenu-danger" onclick="logout()">
+      <span class="bmi-icon">↩</span> ออกจากระบบ
+    </div>
   </div>
 
-  <section id="view-lobby" class="view-section active">
-    
-    <div class="billboard-container" id="billboard-box">
-      <div id="billboard-slider">
-        <div class="billboard-slide active" style="background-image: url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=2029&auto=format&fit=crop');"></div>
-      </div>
-      <div class="billboard-overlay"></div>
+  <!-- ══ PAGE: LOBBY ══ -->
+  <div class="page active" id="page-lobby">
+    <!-- Billboard -->
+    <div id="billboard">
+      <button class="admin-banner-btn" id="adminBannerBtn" onclick="openBannerModal()">✏️ แก้ไข Banner</button>
+      <div id="bannerSlides"></div>
+      <button class="banner-nav left" onclick="bannerPrev()">‹</button>
+      <button class="banner-nav right" onclick="bannerNext()">›</button>
+      <div class="banner-controls" id="bannerDots"></div>
     </div>
 
-    <div class="lobby-logo grad-text">3006</div>
-
-    <div id="adminLobbyCtrl" class="glass-panel" style="display:none; padding:15px; margin-bottom:30px;">
-      <h3 style="color:var(--a2); font-size:1rem; margin-bottom:10px;">⚙️ Admin: Update Billboard & News</h3>
-      <input type="text" id="inBannerUrl" class="input-3d" placeholder="Image URL for Billboard" style="margin-bottom:10px;">
-      <button class="gold-btn" onclick="addBanner()">Update Billboard</button>
-      <hr style="border:0; height:1px; background:var(--border); margin:15px 0;">
-      <textarea id="inNews" class="input-3d" placeholder="Write a brief / news..." rows="3" style="margin-bottom:10px;"></textarea>
-      <button class="gold-btn" onclick="postNews()">Post Brief</button>
+    <!-- Logo Bridge -->
+    <div class="lobby-logo-bridge">
+      <div class="bridge-logo">3006</div>
+      <div class="bridge-sub">ห้องเรียนดิจิทัล · โรงเรียนอัสสัมชัญ</div>
     </div>
 
-    <div class="progress-section">
-      <h2 class="grad-text" style="margin-bottom: 15px; font-size:1.5rem;">System Overview</h2>
-      <div class="glass-panel" style="padding:20px;">
-        <div class="prog-container">
-          <div class="prog-label"><span>Total Video Materials</span> <span id="progVidCount">0</span></div>
-          <div class="prog-track"><div class="prog-fill" id="progVidFill" style="width:50%;"></div></div>
-        </div>
-        <div class="prog-container" style="margin-bottom:0;">
-          <div class="prog-label"><span>Total Quiz Assessments</span> <span id="progQuizCount">0</span></div>
-          <div class="prog-track"><div class="prog-fill" id="progQuizFill" style="width:70%;"></div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="brief-section">
-      <h2 class="grad-text" style="margin-bottom: 15px; font-size:1.5rem;">Latest Briefs</h2>
-      <div id="news-container">
-        </div>
-    </div>
-  </section>
-
-  <section id="view-library" class="view-section">
-    <div class="sh"><h2>📚 คลังวิชาเรียน (Subjects)</h2><div class="sh-line"></div></div>
-    <div class="subjects">
-      <div class="sc glass-panel sci" onclick="openSubject('sci')"><span class="sc-icon">🔬</span><div class="sc-name">วิทยาศาสตร์</div><div class="sc-count" id="cnt-sci">0 วิดีโอ · 0 แบบทดสอบ</div></div>
-      <div class="sc glass-panel math" onclick="openSubject('math')"><span class="sc-icon">📐</span><div class="sc-name">คณิตศาสตร์</div><div class="sc-count" id="cnt-math">0 วิดีโอ · 0 แบบทดสอบ</div></div>
-      <div class="sc glass-panel eng" onclick="openSubject('eng')"><span class="sc-icon">🌐</span><div class="sc-name">ภาษาอังกฤษ</div><div class="sc-count" id="cnt-eng">0 วิดีโอ · 0 แบบทดสอบ</div></div>
-      <div class="sc glass-panel soc" onclick="openSubject('soc')"><span class="sc-icon">🌏</span><div class="sc-name">สังคมศึกษา</div><div class="sc-count" id="cnt-soc">0 วิดีโอ · 0 แบบทดสอบ</div></div>
-      <div class="sc glass-panel hist" onclick="openSubject('hist')"><span class="sc-icon">📜</span><div class="sc-name">ประวัติศาสตร์</div><div class="sc-count" id="cnt-hist">0 วิดีโอ · 0 แบบทดสอบ</div></div>
-      <div class="sc glass-panel comp" onclick="openSubject('comp')"><span class="sc-icon">💻</span><div class="sc-name">คอมพิวเตอร์</div><div class="sc-count" id="cnt-comp">0 วิดีโอ · 0 แบบทดสอบ</div></div>
-    </div>
-
-    <div class="sh" style="margin-top:50px;"><h2>👥 ทำเนียบรุ่น (Directory)</h2><div class="sh-line"></div></div>
-    <div class="search-wrap">
-      <input class="input-3d search" type="text" placeholder="ค้นหาชื่อหรือรหัสประจำตัว..." oninput="filterTable(this.value)">
-    </div>
-    <div class="tbl-wrap glass-panel">
-      <table>
-        <thead><tr><th>No.</th><th>ID</th><th>First Name</th><th>Last Name</th><th>Role</th></tr></thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <section id="view-community" class="view-section">
-    <div class="sh"><h2>💬 Community Hub</h2><div class="sh-line"></div></div>
-    <div class="glass-panel chat-container">
-      <div class="chat-messages" id="chat-messages">
-        </div>
-      <div class="chat-input-area">
-        <input type="text" id="inChat" class="input-3d" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendChat()">
-        <button class="gold-btn" onclick="sendChat()" style="padding:10px 20px;">Send</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="view-settings" class="view-section">
-    <div class="sh"><h2>⚙️ System Preferences</h2><div class="sh-line"></div></div>
-    <div class="glass-panel" style="padding: 20px;">
-      
-      <div style="margin-bottom:30px;">
-        <label style="display:block; font-size:0.85rem; color:var(--a2); margin-bottom:10px; font-weight:600;">Display Name (Community)</label>
-        <div style="display:flex; gap:10px;">
-          <input type="text" id="inDisplayName" class="input-3d" placeholder="Your custom alias...">
-          <button class="gold-btn" onclick="saveDisplayName()">Save</button>
-        </div>
-        <div style="font-size:0.7rem; color:var(--muted); margin-top:5px;">Real name remains unchanged in Directory.</div>
+    <!-- Content below bridge -->
+    <div class="lobby-content">
+      <!-- Admin actions -->
+      <div class="admin-lobby-actions" id="adminLobbyActions" style="display:none">
+        <button class="admin-action-btn" onclick="openBriefModal()">📢 โพสต์ประกาศ</button>
       </div>
 
-      <div class="setting-row">
-        <div class="setting-label">Dark / Light Theme</div>
-        <div class="toggle-switch" id="tglTheme" onclick="toggleSetting('theme', this)">
-          <div class="toggle-knob"></div>
-        </div>
-      </div>
-      <div class="setting-row">
-        <div class="setting-label">Solid Mode (Disable Glass)</div>
-        <div class="toggle-switch" id="tglSolid" onclick="toggleSetting('solid', this)">
-          <div class="toggle-knob"></div>
-        </div>
-      </div>
-      <div class="setting-row" style="border:none;">
-        <div class="setting-label">Lite Mode (Disable 3D/Anim/Bg)</div>
-        <div class="toggle-switch" id="tglLite" onclick="toggleSetting('lite', this)">
-          <div class="toggle-knob"></div>
+      <!-- Announcements -->
+      <div class="lobby-sect">
+        <div class="section-title">📢 ประกาศ &amp; ข่าวสาร <span id="briefCount">0</span></div>
+        <div class="brief-list" id="briefList">
+          <div class="brief-empty">ยังไม่มีประกาศในขณะนี้</div>
         </div>
       </div>
 
+      <!-- Progress -->
+      <div class="lobby-sect">
+        <div class="section-title">📊 ความคืบหน้าการเรียน</div>
+        <div class="progress-grid" id="progressGrid"></div>
+      </div>
     </div>
-  </section>
+  </div>
 
-</div>
+  <!-- ══ PAGE: LIBRARY ══ -->
+  <div class="page" id="page-library">
+    <div class="lib-page">
+      <div class="lib-header fade-in">
+        <h1>Library</h1>
+        <p>คลังวิดีโอสอนและแบบทดสอบ ม.3/6</p>
+      </div>
+      <div class="subject-grid">
+        <div class="subj-card fade-in" onclick="openSubject('sci')">
+          <div class="subj-icon">🔬</div>
+          <div class="subj-name">วิทยาศาสตร์</div>
+          <div class="subj-count" id="cnt-sci">—</div>
+        </div>
+        <div class="subj-card fade-in" onclick="openSubject('math')">
+          <div class="subj-icon">📐</div>
+          <div class="subj-name">คณิตศาสตร์</div>
+          <div class="subj-count" id="cnt-math">—</div>
+        </div>
+        <div class="subj-card fade-in" onclick="openSubject('eng')">
+          <div class="subj-icon">🌐</div>
+          <div class="subj-name">ภาษาอังกฤษ</div>
+          <div class="subj-count" id="cnt-eng">—</div>
+        </div>
+        <div class="subj-card fade-in" onclick="openSubject('soc')">
+          <div class="subj-icon">🌏</div>
+          <div class="subj-name">สังคมศึกษา</div>
+          <div class="subj-count" id="cnt-soc">—</div>
+        </div>
+        <div class="subj-card fade-in" onclick="openSubject('hist')">
+          <div class="subj-icon">📜</div>
+          <div class="subj-name">ประวัติศาสตร์</div>
+          <div class="subj-count" id="cnt-hist">—</div>
+        </div>
+        <div class="subj-card fade-in" onclick="openSubject('comp')">
+          <div class="subj-icon">💻</div>
+          <div class="subj-name">คอมพิวเตอร์</div>
+          <div class="subj-count" id="cnt-comp">—</div>
+        </div>
+      </div>
+      <div class="tbl-section">
+        <div class="section-title" style="margin-bottom:12px">👥 รายชื่อนักเรียน</div>
+        <div class="search-wrap">
+          <input class="search" placeholder="ค้นหาชื่อหรือรหัสประจำตัว..." oninput="filterTable(this.value)">
+        </div>
+        <div class="tbl-wrap">
+          <table><thead><tr>
+            <th>เลขที่</th><th>รหัสประจำตัว</th><th>ชื่อ</th><th>นามสกุล</th><th>บทบาท</th>
+          </tr></thead><tbody id="tbody"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div class="overlay" id="overlay" onclick="overlayBg(event)">
-  <div class="glass-panel modal">
+  <!-- ══ PAGE: COMMUNITY ══ -->
+  <div class="page" id="page-community">
+    <div class="comm-page">
+      <div class="comm-header fade-in">
+        <h1>Community</h1>
+        <p style="color:var(--tx3);font-size:.88rem;margin-top:4px">พื้นที่แลกเปลี่ยนและพูดคุยของ ม.3/6</p>
+      </div>
+      <div class="comm-compose">
+        <textarea id="commInput" placeholder="แชร์ความคิด ถามคำถาม หรือพูดคุยกัน..." maxlength="400" oninput="updateCharCount()"></textarea>
+        <div class="comm-compose-footer">
+          <span class="char-count" id="charCount">0 / 400</span>
+          <button class="post-btn" onclick="submitPost()">โพสต์</button>
+        </div>
+      </div>
+      <div class="comm-feed" id="commFeed">
+        <div style="text-align:center;padding:32px;color:var(--tx3);font-size:.88rem">กำลังโหลด...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: SETTINGS ══ -->
+  <div class="page" id="page-settings">
+    <div class="settings-page">
+      <div class="settings-header fade-in"><h1>Settings</h1></div>
+
+      <!-- Account -->
+      <div class="settings-section">
+        <div class="settings-section-title">Account</div>
+        <div class="settings-row">
+          <span class="settings-icon">👤</span>
+          <div class="settings-label-wrap">
+            <div class="settings-label" id="acct-info">-</div>
+            <div class="settings-hint">บัญชีปัจจุบัน</div>
+          </div>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start">
+          <div style="display:flex;align-items:center;gap:8px;width:100%">
+            <span class="settings-icon">✏️</span>
+            <span class="settings-label">Display Name</span>
+          </div>
+          <input class="settings-input" id="displayNameInput" placeholder="ชื่อที่แสดง (ไม่เปลี่ยนชื่อจริง)" maxlength="30">
+          <button class="settings-save-btn" onclick="saveDisplayName()">บันทึก</button>
+        </div>
+      </div>
+
+      <!-- Theme -->
+      <div class="settings-section">
+        <div class="settings-section-title">Appearance</div>
+        <div class="settings-row">
+          <span class="settings-icon">🌗</span>
+          <div class="settings-label-wrap">
+            <div class="settings-label">Theme</div>
+            <div class="settings-hint">Light หรือ Dark mode</div>
+          </div>
+          <div class="seg" id="themeSeg">
+            <button class="seg-btn active" onclick="setTheme('dark',this)">Dark</button>
+            <button class="seg-btn" onclick="setTheme('light',this)">Light</button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <span class="settings-icon">🫧</span>
+          <div class="settings-label-wrap">
+            <div class="settings-label">Button Style</div>
+            <div class="settings-hint">Glass หรือ Solid</div>
+          </div>
+          <div class="seg" id="styleSeg">
+            <button class="seg-btn active" onclick="setStyle('glass',this)">Glass</button>
+            <button class="seg-btn" onclick="setStyle('solid',this)">Solid</button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <span class="settings-icon">🔋</span>
+          <div class="settings-label-wrap">
+            <div class="settings-label">Lite Mode</div>
+            <div class="settings-hint">ปิดอนิเมชันเพื่อประหยัดพลังงาน</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="liteToggle" onchange="setLite(this.checked)">
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Logout -->
+      <div class="settings-section">
+        <div class="settings-row">
+          <button class="btn-logout-full" onclick="logout()">↩ ออกจากระบบ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<!-- Subject Modal -->
+<div id="overlay" onclick="overlayBg(event)">
+  <div class="modal">
     <div class="modal-hd">
-      <div class="modal-title" id="mTitle">Subject</div>
+      <div class="modal-title" id="mTitle">วิชา</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="glass-panel admin-wrap" id="adminWrap" style="display:none; background:rgba(212,175,55,0.05); border-color:var(--a);">
-        <div class="admin-title">⚙️ Admin Control Panel</div>
-        <div class="tabs" id="adminTabs">
-          <button class="tab on gold-btn" style="box-shadow:none; border:none;" onclick="switchAdminTab('vid',this)">📹 Upload Video</button>
-          <button class="tab" onclick="switchAdminTab('quiz',this)">📝 Create Quiz</button>
+      <!-- Admin strip -->
+      <div class="admin-strip" id="adminWrap" style="display:none">
+        <div class="admin-strip-title">⚙️ Admin Panel</div>
+        <div class="tabs2" id="adminTabs">
+          <button class="tab2 on" onclick="switchAdminTab('vid',this)">📹 เพิ่มวิดีโอ</button>
+          <button class="tab2" onclick="switchAdminTab('quiz',this)">📝 สร้าง Quiz</button>
         </div>
+        <!-- Video form -->
         <div id="vidForm" class="aform">
-          <input id="vTitle" class="input-3d" placeholder="Video Title">
+          <input class="af-input" id="vTitle" placeholder="ชื่อวิดีโอ (จำเป็น)">
           <div class="vsrc-tabs">
-            <button class="vsrc on" id="vsYT" onclick="switchSrc('yt',this)">🔗 YouTube URL</button>
-            <button class="vsrc" id="vsFile" onclick="switchSrc('file',this)">📁 Local File</button>
+            <button class="vsrc-btn on" id="vsYT" onclick="switchSrc('yt',this)">🔗 YouTube URL</button>
+            <button class="vsrc-btn" id="vsFile" onclick="switchSrc('file',this)">📁 อัปโหลดไฟล์</button>
           </div>
-          <div id="srcYT"><input id="vUrl" class="input-3d" placeholder="YouTube Link"></div>
+          <div id="srcYT">
+            <input class="af-input" id="vUrl" placeholder="https://youtu.be/xxxxx">
+          </div>
           <div id="srcFile" style="display:none">
-            <label class="dropzone glass-panel" id="dropzone" for="vFile">
+            <label class="dropzone" id="dropzone" for="vFile">
               <input type="file" id="vFile" accept="video/*" style="display:none" onchange="onFileChange(this)">
               <div id="dropInner">
-                <div class="dropzone-icon">🎬</div>
-                <div class="dropzone-label">Click to select file</div>
+                <div class="dz-icon">🎬</div>
+                <div class="dz-label">คลิกหรือลากไฟล์มาวาง</div>
+                <div class="dz-sub">MP4, MOV, WebM, AVI, MKV</div>
               </div>
             </label>
             <div id="filePreview">
-              <video id="previewVid" controls style="width:100%; border-radius:10px; margin-top:10px;"></video>
-              <button class="gold-btn" onclick="clearFile()" style="margin-top:10px; width:100%; font-size:0.8rem;">Clear File</button>
+              <video id="previewVid" controls></video>
+              <div class="fp-name" id="fpName"></div>
+              <button class="btn-clear-file" onclick="clearFile()">✕ เลือกใหม่</button>
+            </div>
+            <div class="prog-wrap2" id="progWrap">
+              <div class="prog-bar2"><div class="prog-fill2" id="progFill"></div></div>
+              <div class="prog-txt2" id="progTxt">กำลังบันทึก...</div>
             </div>
           </div>
-          <button class="gold-btn" onclick="addVideo()">Upload Content</button>
+          <button class="btn-admin" onclick="addVideo()">➕ เผยแพร่วิดีโอ</button>
         </div>
+        <!-- Quiz form -->
         <div id="quizForm" class="aform" style="display:none">
-          <input id="qTitle" class="input-3d" placeholder="Quiz Title">
+          <input class="af-input" id="qTitle" placeholder="ชื่อแบบทดสอบ">
           <div id="qContainer"></div>
-          <button class="gold-btn" style="background:transparent !important; border:1px dashed var(--a) !important; color:var(--a) !important; box-shadow:none !important;" onclick="addQ()">+ Add Question</button>
-          <button class="gold-btn" onclick="saveQuiz()">Save Quiz</button>
+          <button class="btn-add-q" onclick="addQ()">+ เพิ่มคำถาม</button>
+          <button class="btn-admin" onclick="saveQuiz()">💾 บันทึกแบบทดสอบ</button>
         </div>
       </div>
-
-      <div class="tabs" id="contentTabs">
-        <button class="tab on gold-btn" style="box-shadow:none; border:none;" onclick="switchContent('vids',this)">📹 Videos</button>
-        <button class="tab" onclick="switchContent('quiz',this)">📝 Quizzes</button>
+      <!-- Content tabs -->
+      <div class="tabs2" id="contentTabs">
+        <button class="tab2 on" onclick="switchContent('vids',this)">📹 วิดีโอสอน</button>
+        <button class="tab2" onclick="switchContent('quiz',this)">📝 แบบทดสอบ</button>
       </div>
-
       <div id="panelVids"><div id="vgrid" class="vgrid"></div></div>
       <div id="panelQuiz" style="display:none">
-        <div id="qlistEl" class="qlist"></div>
-        <div id="quizPlay">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-            <button class="gold-btn" style="padding:6px 12px; font-size:0.8rem;" onclick="exitQuiz()">← Back</button>
-            <span id="qPlayTitle" class="grad-text" style="font-size:1.1rem; font-weight:800;"></span>
+        <div id="qlistEl" class="qlist2"></div>
+        <div id="quizPlay2">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <button class="qback2" onclick="exitQuiz()">← กลับ</button>
+            <span id="qPlayTitle" style="font-family:'Prompt',sans-serif;font-size:.9rem;font-weight:700;color:var(--ac2)"></span>
           </div>
           <div id="qQuestionView">
-            <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--a);margin-bottom:8px;font-weight:600;">
-              <span>Question <span id="qN">1</span>/<span id="qT">1</span></span>
-              <span>Score: <span id="qS" style="color:var(--white);">0</span></span>
+            <div style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--tx3);margin-bottom:6px">
+              <span>ข้อ <span id="qN">1</span>/<span id="qT">1</span></span>
+              <span>คะแนน <span id="qS" style="color:var(--ac);font-weight:700">0</span></span>
             </div>
-            <div style="height:6px; background:rgba(0,0,0,0.5); border-radius:3px; overflow:hidden; margin-bottom:20px; border:1px solid var(--border);">
-              <div id="qProg" style="height:100%; background:linear-gradient(90deg,var(--a),var(--a2)); width:0%; transition:width .4s;"></div>
-            </div>
-            <div class="glass-panel qbox">
-              <div class="qtext grad-text" id="qText" style="font-size:1.2rem; font-weight:700; margin-bottom:20px;"></div>
-              <div class="opts-grid" id="optsList"></div>
+            <div class="qpbar-wrap"><div class="qpbar-fill" id="qProg"></div></div>
+            <div class="qbox2">
+              <div class="qtext2" id="qText"></div>
+              <div class="opts-grid2" id="optsList"></div>
             </div>
           </div>
-          <div id="qResult" class="glass-panel result-box" style="display:none">
-            <h2 class="grad-text" style="font-size:2rem; margin-bottom:10px;" id="scoreNum">0/0</h2>
-            <div class="score-msg" id="scoreMsg" style="color:var(--a2); margin-bottom:20px;"></div>
-            <button class="gold-btn" onclick="retryQuiz()">Retry</button>
-            <button class="gold-btn" onclick="exitQuiz()" style="background:transparent!important; color:var(--a)!important; border:1px solid var(--a)!important; box-shadow:none!important;">Close</button>
+          <div id="qResult" class="result-box2" style="display:none">
+            <div class="score-ring2" id="scoreRing">
+              <div class="score-inner2">
+                <div class="score-num2" id="scoreNum">0/0</div>
+                <div class="score-lbl2">คะแนน</div>
+              </div>
+            </div>
+            <div class="score-msg2" id="scoreMsg"></div>
+            <div class="score-det2" id="scoreDet"></div>
+            <button class="btn-start2" onclick="retryQuiz()" style="margin-right:8px">🔄 ทำอีกครั้ง</button>
+            <button class="qback2" onclick="exitQuiz()">กลับ</button>
           </div>
         </div>
       </div>
@@ -528,10 +1293,47 @@ tr:hover td { background:rgba(212,175,55,.05); }
   </div>
 </div>
 
-<div id="vidOverlay" class="overlay" onclick="closeVid(event)">
+<!-- Video Overlay -->
+<div id="vidOverlay" onclick="closeVid(event)">
   <div class="vid-box">
-    <button class="gold-btn" style="position:absolute; top:-50px; right:0; padding:8px 15px;" onclick="closeVid(null,true)">Close ✕</button>
+    <div class="vid-label-top" id="vidLabel"></div>
+    <button class="vid-close" onclick="closeVid(null,true)">✕</button>
     <div id="vidContent"></div>
+  </div>
+</div>
+
+<!-- Banner Modal -->
+<div id="bannerModal" onclick="closeBannerModal(event)">
+  <div class="banner-modal-box" onclick="event.stopPropagation()">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div class="banner-modal-title">🖼 จัดการ Banner Slides</div>
+      <button class="modal-close" onclick="closeBannerModal(null,true)">✕</button>
+    </div>
+    <div class="banner-url-list" id="bannerUrlList"></div>
+    <div class="aform">
+      <input class="af-input" id="bannerUrlInput" placeholder="URL รูปภาพ (https://...)">
+      <button class="btn-admin" onclick="addBannerUrl()">➕ เพิ่มสไลด์</button>
+    </div>
+  </div>
+</div>
+
+<!-- Brief Post Modal -->
+<div id="briefModal" onclick="closeBriefModal(event)">
+  <div class="brief-modal-box" onclick="event.stopPropagation()">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div class="banner-modal-title">📢 โพสต์ประกาศใหม่</div>
+      <button class="modal-close" onclick="closeBriefModal(null,true)">✕</button>
+    </div>
+    <div class="aform">
+      <input class="af-input" id="briefTitleInput" placeholder="หัวข้อประกาศ">
+      <textarea class="af-input af-textarea" id="briefBodyInput" placeholder="รายละเอียด..."></textarea>
+      <select class="af-input" id="briefTagInput">
+        <option value="info">📘 ข้อมูล</option>
+        <option value="warn">⚠️ สำคัญ</option>
+        <option value="em">✅ ดีงาม</option>
+      </select>
+      <button class="btn-admin" onclick="submitBrief()">📢 โพสต์</button>
+    </div>
   </div>
 </div>
 
@@ -541,439 +1343,741 @@ tr:hover td { background:rgba(212,175,55,.05); }
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-/* ══════════════ SECURITY & UX ══════════════ */
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.onkeydown = function(e) {
-  if (e.keyCode === 123) return false;
-  if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) return false;
-  if (e.ctrlKey && e.keyCode === 85) return false;
-};
-
-// Scroll Parallax for Billboard
-window.addEventListener('scroll', () => {
-  const lobby = document.getElementById('view-lobby');
-  if(lobby.classList.contains('active')) {
-    let scrollY = window.scrollY;
-    let opacity = 1 - (scrollY / 300);
-    if(opacity < 0) opacity = 0;
-    document.getElementById('billboard-box').style.opacity = opacity;
-  }
-});
-
-/* ══════════════ FIREBASE INITIALIZE ══════════════ */
-const firebaseConfig = {
-  apiKey: "AIzaSyCRSyVo_JcxGKw_7hERzxVi9T68TUgUibQ",
-  authDomain: "ac-library-c63ee.firebaseapp.com",
-  databaseURL: "https://ac-library-c63ee-default-rtdb.firebaseio.com",
-  projectId: "ac-library-c63ee",
-  storageBucket: "ac-library-c63ee.firebasestorage.app"
+/* ══════════════════════════════════
+   FIREBASE
+══════════════════════════════════ */
+const firebaseConfig={
+  apiKey:"AIzaSyCRSyVo_JcxGKw_7hERzxVi9T68TUgUibQ",
+  authDomain:"ac-library-c63ee.firebaseapp.com",
+  databaseURL:"https://ac-library-c63ee-default-rtdb.firebaseio.com",
+  projectId:"ac-library-c63ee",
+  storageBucket:"ac-library-c63ee.firebasestorage.app",
+  messagingSenderId:"839731834004",
+  appId:"1:839731834004:web:c5bcd84db9a6fa836ed881"
 };
 firebase.initializeApp(firebaseConfig);
-const dbRef = firebase.database().ref('3006_data'); // Changed root node to 3006
-const dbLibrary = dbRef.child('library');
-const dbNews = dbRef.child('news');
-const dbChat = dbRef.child('chat');
-const dbBanners = dbRef.child('banners');
+const DB=firebase.database();
+const dbRef=DB.ref('ac_library_data');
+const communityRef=DB.ref('community');
+const bannerRef=DB.ref('banners');
+const briefRef=DB.ref('briefs');
 
-/* ══════════════ DATA & STATE ══════════════ */
+/* ══════════════════════════════════
+   STUDENTS DATA
+══════════════════════════════════ */
 const STUDENTS=[
-  {no:1,id:'56006',first:'ณัฐธีร์',last:'ชาติชีวินทร์'}, {no:2,id:'56044',first:'ภูวิชญ์',last:'บุญมี'},
-  {no:3,id:'56269',first:'ธนเดช',last:'วงษ์ชูแก้ว'}, {no:4,id:'56315',first:'พิจักษณ์',last:'ทองสมัครพันธ์'},
-  {no:5,id:'56363',first:'นัธทวัฒน์',last:'เพ็ชรพันธ์'}, {no:6,id:'56369',first:'ณัฐภูมินทร์',last:'ไตรทิพย์วิทยา'},
-  {no:7,id:'56392',first:'กรวิชญ์',last:'อำพันสุข'}, {no:8,id:'56398',first:'ชนาธิป',last:'สนุกล้ำ'},
-  {no:9,id:'56406',first:'พงศ์ชัย',last:'จาง'}, {no:10,id:'56431',first:'กันตพัฒน์',last:'เลิศไพศาลกรกุล'},
-  {no:11,id:'56462',first:'ธนกฤต',last:'ทิตยาคุณาธร'}, {no:12,id:'56506',first:'รัชพล',last:'จรัสพัฒน์'},
-  {no:13,id:'56516',first:'ศักดิ์ธวัช',last:'ฐานานุศักดิ์'}, {no:14,id:'56523',first:'บุญญปัญญ์',last:'เสริมสุข'},
-  {no:15,id:'56527',first:'ธนกฤต',last:'ศุภรังค์'}, {no:16,id:'56538',first:'ณฐพงศ์',last:'คุณจักร'},
-  {no:17,id:'56548',first:'ธีภพ',last:'ทองคุ้ม'}, {no:18,id:'56552',first:'กฤติธี',last:'ชาญนคร'},
-  {no:19,id:'56563',first:'สรวิชญ์',last:'สมจิตร'}, {no:20,id:'56566',first:'อริย์ธัช',last:'นภัสกรสิริโชติ'},
-  {no:21,id:'56602',first:'สุจิรภาคย์',last:'บำเพ็ญรัตน์'}, {no:22,id:'56629',first:'กรณ์ฐู',last:'ปลอดภัย'},
-  {no:23,id:'56639',first:'ปรานต์',last:'เบญจพลาพร'}, {no:24,id:'56648',first:'สุกฤษฎิ์',last:'เอี่ยมศักดิ์อุฬาร'},
-  {no:25,id:'57509',first:'คุณภชา',last:'อภิรักษ์ภูบาล'}, {no:26,id:'59891',first:'กฤษฎิ์',last:'กันชะศิวัฒน์'},
-  {no:27,id:'59892',first:'อนพัทย์',last:'มะลิวงศ์'}, {no:28,id:'59898',first:'ปภังกร',last:'อิ้งพานิช'},
-  {no:29,id:'59899',first:'ภูวิน',last:'ชัยอดิศักดิ์โสภา'}, {no:30,id:'59904',first:'ศิวะนนท์',last:'เอกศิรินวนันท์'},
-  {no:31,id:'59927',first:'ฉันทกร',last:'ฉันทโชติ'}, {no:32,id:'59947',first:'พัชรธร',last:'ศรีประมงค์'},
-  {no:33,id:'59953',first:'พิชญ์ตม์',last:'จันทร์วัง'}, {no:34,id:'60041',first:'ชนะชัย',last:'วราวรรณ ณ อยุธยา'},
+  {no:1,id:'56006',first:'ณัฐธีร์',last:'ชาติชีวินทร์'},
+  {no:2,id:'56044',first:'ภูวิชญ์',last:'บุญมี'},
+  {no:3,id:'56269',first:'ธนเดช',last:'วงษ์ชูแก้ว'},
+  {no:4,id:'56315',first:'พิจักษณ์',last:'ทองสมัครพันธ์'},
+  {no:5,id:'56363',first:'นัธทวัฒน์',last:'เพ็ชรพันธ์'},
+  {no:6,id:'56369',first:'ณัฐภูมินทร์',last:'ไตรทิพย์วิทยา'},
+  {no:7,id:'56392',first:'กรวิชญ์',last:'อำพันสุข'},
+  {no:8,id:'56398',first:'ชนาธิป',last:'สนุกล้ำ'},
+  {no:9,id:'56406',first:'พงศ์ชัย',last:'จาง'},
+  {no:10,id:'56431',first:'กันตพัฒน์',last:'เลิศไพศาลกรกุล'},
+  {no:11,id:'56462',first:'ธนกฤต',last:'ทิตยาคุณาธร'},
+  {no:12,id:'56506',first:'รัชพล',last:'จรัสพัฒน์'},
+  {no:13,id:'56516',first:'ศักดิ์ธวัช',last:'ฐานานุศักดิ์'},
+  {no:14,id:'56523',first:'บุญญปัญญ์',last:'เสริมสุข'},
+  {no:15,id:'56527',first:'ธนกฤต',last:'ศุภรังค์'},
+  {no:16,id:'56538',first:'ณฐพงศ์',last:'คุณจักร'},
+  {no:17,id:'56548',first:'ธีภพ',last:'ทองคุ้ม'},
+  {no:18,id:'56552',first:'กฤติธี',last:'ชาญนคร'},
+  {no:19,id:'56563',first:'สรวิชญ์',last:'สมจิตร'},
+  {no:20,id:'56566',first:'อริย์ธัช',last:'นภัสกรสิริโชติ'},
+  {no:21,id:'56602',first:'สุจิรภาคย์',last:'บำเพ็ญรัตน์'},
+  {no:22,id:'56629',first:'กรณ์ฐู',last:'ปลอดภัย'},
+  {no:23,id:'56639',first:'ปรานต์',last:'เบญจพลาพร'},
+  {no:24,id:'56648',first:'สุกฤษฎิ์',last:'เอี่ยมศักดิ์อุฬาร'},
+  {no:25,id:'57509',first:'คุณภชา',last:'อภิรักษ์ภูบาล'},
+  {no:26,id:'59891',first:'กฤษฎิ์',last:'กันชะศิวัฒน์'},
+  {no:27,id:'59892',first:'อนพัทย์',last:'มะลิวงศ์'},
+  {no:28,id:'59898',first:'ปภังกร',last:'อิ้งพานิช'},
+  {no:29,id:'59899',first:'ภูวิน',last:'ชัยอดิศักดิ์โสภา'},
+  {no:30,id:'59904',first:'ศิวะนนท์',last:'เอกศิรินวนันท์'},
+  {no:31,id:'59927',first:'ฉันทกร',last:'ฉันทโชติ'},
+  {no:32,id:'59947',first:'พัชรธร',last:'ศรีประมงค์'},
+  {no:33,id:'59953',first:'พิชญ์ตม์',last:'จันทร์วัง'},
+  {no:34,id:'60041',first:'ชนะชัย',last:'วราวรรณ ณ อยุธยา'},
   {no:35,id:'60455',first:'ฐาปกรณ์',last:'เจริญกิจรักษา'},
 ];
 const ADMIN_NO='27', ADMIN_PASS='anapatmaliwong59892';
-const SUBJ_ICONS={sci:'🔬 วิทยาศาสตร์',math:'📐 คณิตศาสตร์',eng:'🌐 ภาษาอังกฤษ',soc:'🌏 สังคมศึกษา',hist:'📜 ประวัติศาสตร์',comp:'💻 คอมพิวเตอร์'};
+const SUBJ={sci:'🔬 วิทยาศาสตร์',math:'📐 คณิตศาสตร์',eng:'🌐 ภาษาอังกฤษ',soc:'🌏 สังคมศึกษา',hist:'📜 ประวัติศาสตร์',comp:'💻 คอมพิวเตอร์'};
 
-let user=null, isAdmin=false, subj=null, selFile=null;
-let curQuiz=null, qIdx=0, qOk=0, tempQs=[], curSrc='yt';
-let DB_LIB={}, DB_NEWS={}, DB_CHAT={}, DB_BANNERS=[];
+/* ══════════════════════════════════
+   STATE
+══════════════════════════════════ */
+let user=null,isAdmin=false,subj=null,selFile=null;
+let curQuiz=null,qIdx=0,qOk=0,tempQs=[],curSrc='yt';
+let DB_DATA={};
+let bannerSlides=[],bannerIdx=0,bannerTimer=null;
+let communityPosts={};
+let briefPosts={};
 
-/* ══════════════ SYNC FROM FIREBASE ══════════════ */
-dbRef.on('value', snap => {
-  const data = snap.val() || {};
-  DB_LIB = data.library || {};
-  DB_NEWS = data.news || {};
-  DB_CHAT = data.chat || {};
-  DB_BANNERS = data.banners ? Object.values(data.banners) : ["https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=2000"];
-  
+/* ══════════════════════════════════
+   INDEXEDDB
+══════════════════════════════════ */
+let idb=null;
+const IDB_NAME='ACLib3006',IDB_VER=1,STORE='vfiles';
+function initDB(){
+  return new Promise(r=>{
+    const req=indexedDB.open(IDB_NAME,IDB_VER);
+    req.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains(STORE))d.createObjectStore(STORE,{keyPath:'fid'})};
+    req.onsuccess=e=>{idb=e.target.result;r()};
+    req.onerror=()=>r();
+  });
+}
+function dbSave(fid,file){return new Promise((ok,err)=>{if(!idb){err(new Error('DB not ready'));return}const tx=idb.transaction(STORE,'readwrite');tx.objectStore(STORE).put({fid,file});tx.oncomplete=ok;tx.onerror=err})}
+function dbGet(fid){return new Promise((ok,err)=>{if(!idb){ok(null);return}const req=idb.transaction(STORE,'readonly').objectStore(STORE).get(fid);req.onsuccess=e=>ok(e.target.result?.file||null);req.onerror=err})}
+function dbDel(fid){return new Promise(ok=>{if(!idb){ok();return}const tx=idb.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(fid);tx.oncomplete=ok;tx.onerror=ok})}
+
+/* ══════════════════════════════════
+   FIREBASE SYNC
+══════════════════════════════════ */
+dbRef.on('value',snap=>{
+  DB_DATA=snap.val()||{};
   updateCounts();
-  updateProgress();
-  renderNews();
-  renderChat();
-  renderBanners();
-
-  if(subj && document.getElementById('overlay').classList.contains('open')){
-    renderVids(); renderQuizList();
-  }
+  updateProgressGrid();
+  if(subj && document.getElementById('overlay').classList.contains('open')){renderVids();renderQuizList()}
+});
+bannerRef.on('value',snap=>{
+  bannerSlides=(snap.val()||[]).filter(Boolean);
+  renderBanner();
+});
+briefRef.on('value',snap=>{
+  briefPosts=snap.val()||{};
+  renderBriefs();
+});
+communityRef.on('value',snap=>{
+  communityPosts=snap.val()||{};
+  if(document.getElementById('page-community').classList.contains('active')) renderCommunity();
 });
 
-function getC(s){ return DB_LIB[s] || {videos:[],quizzes:[]}; }
-function setC(s,d){ DB_LIB[s] = d; dbLibrary.child(s).set(d); }
+/* ══════════════════════════════════
+   BACKGROUND CANVAS
+══════════════════════════════════ */
+(function(){
+  const c=document.getElementById('bgc'),ctx=c.getContext('2d');
+  let W,H,orbs=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  function mkOrbs(){orbs=[];const cols=['rgba(78,205,196','rgba(43,168,159','rgba(168,230,223'];for(let i=0;i<4;i++)orbs.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*300+150,dx:(Math.random()-.5)*.12,dy:(Math.random()-.5)*.12,col:cols[i%cols.length],a:Math.random()*.03+.015})}
+  function draw(){
+    if(document.body.dataset.lite==='true'){requestAnimationFrame(draw);return}
+    ctx.clearRect(0,0,W,H);
+    orbs.forEach(o=>{const g=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r);g.addColorStop(0,o.col+','+o.a+')');g.addColorStop(1,o.col+',0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,Math.PI*2);ctx.fill();o.x+=o.dx;o.y+=o.dy;if(o.x<-o.r||o.x>W+o.r)o.dx*=-1;if(o.y<-o.r||o.y>H+o.r)o.dy*=-1});
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',()=>{resize();mkOrbs()});
+  resize();mkOrbs();draw();
+})();
 
-/* ══════════════ AUTH & AUTO-LOGIN ══════════════ */
-function processLoginUI(s, forceAdmin = false) {
-  user=s; isAdmin = forceAdmin || (s.no === 27);
+/* ══════════════════════════════════
+   AUTH
+══════════════════════════════════ */
+function processLogin(s,forceAdmin){
+  user=s; isAdmin=forceAdmin||false;
   document.getElementById('loginPage').style.display='none';
   document.getElementById('app').style.display='block';
-  document.getElementById('navAva').textContent=s.first.charAt(0);
-  document.getElementById('navAdmin').style.display=isAdmin?'inline':'none';
-  document.getElementById('adminLobbyCtrl').style.display=isAdmin?'block':'none';
-  
-  // Set Display Name Default
-  let dName = localStorage.getItem('3006_display_name');
-  if(!dName) { dName = s.first; localStorage.setItem('3006_display_name', dName); }
-  document.getElementById('inDisplayName').value = dName;
-  
-  renderTable(STUDENTS); updateCounts(); updateProgress();
-  switchView('lobby');
+  const dn=localStorage.getItem('dn_'+s.no)||s.first;
+  document.getElementById('navAva').textContent=dn.charAt(0);
+  document.getElementById('navName').textContent=dn;
+  document.getElementById('navAdminDot').style.display=isAdmin?'block':'none';
+  document.getElementById('adminBannerBtn').style.display=isAdmin?'block':'none';
+  document.getElementById('adminLobbyActions').style.display=isAdmin?'flex':'none';
+  document.getElementById('acct-info').textContent='เลขที่ '+s.no+' · '+s.first+' '+s.last;
+  document.getElementById('displayNameInput').value=localStorage.getItem('dn_'+s.no)||'';
+  applySettings();
+  renderTable(STUDENTS);
+  updateCounts();
+  updateProgressGrid();
+  renderBriefs();
+  renderCommunity();
 }
-
 function doLogin(){
   const no=document.getElementById('inNo').value.trim();
   const pw=document.getElementById('inPass').value.trim();
-  if(no===ADMIN_NO && pw===ADMIN_PASS){
+  if(no===ADMIN_NO&&pw===ADMIN_PASS){
     const s=STUDENTS.find(x=>x.no===27);
-    localStorage.setItem('3006_session', JSON.stringify({no: s.no, role: 'admin'}));
-    processLoginUI(s, true); return;
+    processLogin(s,true);
+    localStorage.setItem('ac_session',JSON.stringify({no:s.no,role:'admin'}));
+    return;
   }
-  const s=STUDENTS.find(x=>String(x.no)===no && x.id===pw);
-  if(!s){ document.getElementById('loginErr').style.display='block'; return; }
-  
-  localStorage.setItem('3006_session', JSON.stringify({no: s.no, role: 'user'}));
-  processLoginUI(s, false);
+  if(no===ADMIN_NO){document.getElementById('loginErr').style.display='block';return}
+  const s=STUDENTS.find(x=>String(x.no)===no&&x.id===pw);
+  if(!s){document.getElementById('loginErr').style.display='block';return}
+  processLogin(s,false);
+  localStorage.setItem('ac_session',JSON.stringify({no:s.no,role:'user'}));
 }
-
 function logout(){
-  localStorage.removeItem('3006_session');
-  location.reload();
+  user=null;isAdmin=false;
+  localStorage.removeItem('ac_session');
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginPage').style.display='flex';
+  document.getElementById('inNo').value='';document.getElementById('inPass').value='';
+  document.getElementById('loginErr').style.display='none';
+  closeBurger();
+}
+function checkAutoLogin(){
+  const s=localStorage.getItem('ac_session');
+  if(!s)return;
+  try{const p=JSON.parse(s);const st=STUDENTS.find(x=>x.no===p.no);if(st)processLogin(st,p.role==='admin');else localStorage.removeItem('ac_session')}catch(e){}
+}
+document.getElementById('inPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+document.getElementById('inNo').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+
+/* ══════════════════════════════════
+   NAVIGATION
+══════════════════════════════════ */
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.bmenu-item[id^="bm-"]').forEach(b=>b.classList.remove('active'));
+  const bm=document.getElementById('bm-'+id);
+  if(bm)bm.classList.add('active');
+  closeBurger();
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='community')renderCommunity();
+}
+function toggleBurger(){document.getElementById('burgerMenu').classList.toggle('open')}
+function closeBurger(){document.getElementById('burgerMenu').classList.remove('open')}
+document.addEventListener('click',e=>{
+  const bm=document.getElementById('burgerMenu');
+  const bb=document.getElementById('burgerBtn');
+  if(bm.classList.contains('open')&&!bm.contains(e.target)&&!bb.contains(e.target))closeBurger();
+});
+
+/* ══════════════════════════════════
+   SETTINGS
+══════════════════════════════════ */
+function applySettings(){
+  const th=localStorage.getItem('theme')||'dark';
+  const st=localStorage.getItem('style')||'glass';
+  const lt=localStorage.getItem('lite')==='true';
+  document.documentElement.dataset.theme=th;
+  document.documentElement.dataset.style=st;
+  document.documentElement.dataset.lite=lt;
+  document.body.dataset.theme=th;
+  document.body.dataset.style=st;
+  document.body.dataset.lite=lt;
+  document.getElementById('liteToggle').checked=lt;
+  document.querySelectorAll('#themeSeg .seg-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase()===th));
+  document.querySelectorAll('#styleSeg .seg-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase()===st));
+}
+function setTheme(t,btn){
+  localStorage.setItem('theme',t);
+  document.documentElement.dataset.theme=t;
+  document.body.dataset.theme=t;
+  document.querySelectorAll('#themeSeg .seg-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function setStyle(s,btn){
+  localStorage.setItem('style',s);
+  document.documentElement.dataset.style=s;
+  document.body.dataset.style=s;
+  document.querySelectorAll('#styleSeg .seg-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function setLite(v){
+  localStorage.setItem('lite',v);
+  document.documentElement.dataset.lite=v;
+  document.body.dataset.lite=v;
+}
+function saveDisplayName(){
+  if(!user)return;
+  const dn=document.getElementById('displayNameInput').value.trim();
+  if(!dn){toast('กรุณากรอก Display Name','err');return}
+  localStorage.setItem('dn_'+user.no,dn);
+  document.getElementById('navAva').textContent=dn.charAt(0);
+  document.getElementById('navName').textContent=dn;
+  toast('✅ บันทึก Display Name แล้ว');
 }
 
-function checkAutoLogin() {
-  const session = localStorage.getItem('3006_session');
-  if(session) {
-    try {
-      const parsed = JSON.parse(session);
-      const s = STUDENTS.find(x => x.no === parsed.no);
-      if(s) processLoginUI(s, parsed.role === 'admin');
-      else localStorage.removeItem('3006_session');
-    } catch(e) {}
-  }
+/* ══════════════════════════════════
+   BANNER BILLBOARD
+══════════════════════════════════ */
+const DEFAULT_BANNERS=[
+  'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1400&q=80',
+  'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1400&q=80',
+  'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1400&q=80'
+];
+function renderBanner(){
+  const slides=bannerSlides.length?bannerSlides:DEFAULT_BANNERS;
+  const container=document.getElementById('bannerSlides');
+  const dots=document.getElementById('bannerDots');
+  container.innerHTML=slides.map((url,i)=>`<div class="banner-slide${i===0?' active':''}" style="background-image:url('${url}')"></div>`).join('');
+  dots.innerHTML=slides.map((_,i)=>`<div class="banner-dot${i===0?' active':''}" onclick="goBanner(${i})"></div>`).join('');
+  bannerIdx=0;
+  startBannerTimer();
+}
+function goBanner(i){
+  const slides=document.querySelectorAll('.banner-slide');
+  const dots=document.querySelectorAll('.banner-dot');
+  slides.forEach(s=>s.classList.remove('active','prev'));
+  dots.forEach(d=>d.classList.remove('active'));
+  bannerIdx=i;
+  slides[i].classList.add('active');
+  dots[i].classList.add('active');
+}
+function bannerNext(){
+  const slides=document.querySelectorAll('.banner-slide');
+  goBanner((bannerIdx+1)%slides.length);
+  restartBannerTimer();
+}
+function bannerPrev(){
+  const slides=document.querySelectorAll('.banner-slide');
+  goBanner((bannerIdx-1+slides.length)%slides.length);
+  restartBannerTimer();
+}
+function startBannerTimer(){
+  if(bannerTimer)clearInterval(bannerTimer);
+  bannerTimer=setInterval(bannerNext,4500);
+}
+function restartBannerTimer(){startBannerTimer()}
+
+/* Banner modal */
+function openBannerModal(){
+  renderBannerUrlList();
+  document.getElementById('bannerModal').classList.add('open');
+}
+function closeBannerModal(e,force){if(force||e?.target===document.getElementById('bannerModal'))document.getElementById('bannerModal').classList.remove('open')}
+function renderBannerUrlList(){
+  const slides=bannerSlides.length?bannerSlides:[];
+  document.getElementById('bannerUrlList').innerHTML=slides.length
+    ?slides.map((url,i)=>`<div class="banner-url-item"><span class="bui-text">${url}</span><button class="bui-del" onclick="deleteBannerUrl(${i})">✕</button></div>`).join('')
+    :'<div style="color:var(--tx3);font-size:.82rem;padding:4px 0">ยังไม่มีสไลด์ (ใช้รูปเริ่มต้น)</div>';
+}
+function addBannerUrl(){
+  const url=document.getElementById('bannerUrlInput').value.trim();
+  if(!url){toast('กรุณากรอก URL','err');return}
+  const arr=[...bannerSlides,url];
+  bannerRef.set(arr);
+  document.getElementById('bannerUrlInput').value='';
+  toast('✅ เพิ่มสไลด์แล้ว');
+  renderBannerUrlList();
+}
+function deleteBannerUrl(i){
+  const arr=[...bannerSlides];
+  arr.splice(i,1);
+  bannerRef.set(arr.length?arr:null);
+  toast('ลบสไลด์แล้ว');
 }
 
-/* ══════════════ ROUTING & NAVIGATION ══════════════ */
-function toggleMenu() {
-  document.getElementById('menu-overlay').classList.toggle('active');
+/* ══════════════════════════════════
+   BRIEF / ANNOUNCEMENTS
+══════════════════════════════════ */
+function openBriefModal(){document.getElementById('briefModal').classList.add('open')}
+function closeBriefModal(e,force){if(force||e?.target===document.getElementById('briefModal'))document.getElementById('briefModal').classList.remove('open')}
+function submitBrief(){
+  const title=document.getElementById('briefTitleInput').value.trim();
+  const body=document.getElementById('briefBodyInput').value.trim();
+  const tag=document.getElementById('briefTagInput').value;
+  if(!title||!body){toast('กรุณากรอกหัวข้อและรายละเอียด','err');return}
+  const id='brief_'+Date.now();
+  briefRef.child(id).set({id,title,body,tag,author:user.first,authorNo:user.no,ts:Date.now()});
+  document.getElementById('briefTitleInput').value='';
+  document.getElementById('briefBodyInput').value='';
+  closeBriefModal(null,true);
+  toast('✅ โพสต์ประกาศแล้ว');
 }
-function switchView(vId) {
-  document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-  document.getElementById('view-' + vId).classList.add('active');
-  document.getElementById('menu-overlay').classList.remove('active');
-  window.scrollTo(0,0);
-}
-
-/* ══════════════ SETTINGS & THEMES ══════════════ */
-function toggleSetting(type, el) {
-  el.classList.toggle('on');
-  const isOn = el.classList.contains('on');
-  localStorage.setItem('3006_set_'+type, isOn);
-  applySettings();
-}
-function saveDisplayName() {
-  const nm = document.getElementById('inDisplayName').value.trim();
-  if(nm) {
-    localStorage.setItem('3006_display_name', nm);
-    toast('Display name updated!');
-  }
-}
-function applySettings() {
-  const isLight = localStorage.getItem('3006_set_theme') === 'true';
-  const isSolid = localStorage.getItem('3006_set_solid') === 'true';
-  const isLite = localStorage.getItem('3006_set_lite') === 'true';
-  
-  if(isLight) { document.body.classList.add('light-theme'); document.getElementById('tglTheme').classList.add('on'); } 
-  else { document.body.classList.remove('light-theme'); document.getElementById('tglTheme').classList.remove('on'); }
-  
-  if(isSolid) { document.body.classList.add('solid-buttons'); document.getElementById('tglSolid').classList.add('on'); } 
-  else { document.body.classList.remove('solid-buttons'); document.getElementById('tglSolid').classList.remove('on'); }
-  
-  if(isLite) { document.body.classList.add('lite-mode'); document.getElementById('tglLite').classList.add('on'); } 
-  else { document.body.classList.remove('lite-mode'); document.getElementById('tglLite').classList.remove('on'); }
+function deleteBrief(id){briefRef.child(id).remove();toast('ลบประกาศแล้ว')}
+function renderBriefs(){
+  const list=Object.values(briefPosts).sort((a,b)=>b.ts-a.ts);
+  document.getElementById('briefCount').textContent=list.length;
+  const el=document.getElementById('briefList');
+  if(!list.length){el.innerHTML='<div class="brief-empty">ยังไม่มีประกาศในขณะนี้</div>';return}
+  el.innerHTML=list.map(p=>`
+    <div class="brief-card">
+      <div class="brief-card-top">
+        <div>
+          <div class="brief-title">${esc(p.title)}</div>
+          <div class="brief-body">${esc(p.body)}</div>
+          <div class="brief-meta">โดย ${esc(p.author)} · ${timeAgo(p.ts)}</div>
+        </div>
+        <span class="brief-tag ${p.tag}">${{info:'📘 ข้อมูล',warn:'⚠️ สำคัญ',em:'✅ ดีงาม'}[p.tag]||'📘'}</span>
+      </div>
+      ${isAdmin?`<button class="brief-del-btn" onclick="deleteBrief('${p.id}')">🗑</button>`:''}
+    </div>`).join('');
 }
 
-/* ══════════════ LOBBY LOGIC ══════════════ */
-function addBanner() {
-  const url = document.getElementById('inBannerUrl').value.trim();
-  if(!url) return;
-  dbBanners.push(url);
-  document.getElementById('inBannerUrl').value='';
-  toast('Billboard Updated!');
-}
-function renderBanners() {
-  const box = document.getElementById('billboard-slider');
-  if(!DB_BANNERS.length) return;
-  // Just showing the latest banner for simplicity, or creating a slide
-  const latest = DB_BANNERS[DB_BANNERS.length-1];
-  box.innerHTML = `<div class="billboard-slide active" style="background-image: url('${latest}');"></div>`;
-}
-
-function postNews() {
-  const text = document.getElementById('inNews').value.trim();
-  if(!text) return;
-  dbNews.push({ text: text, time: Date.now(), author: 'System Admin' });
-  document.getElementById('inNews').value='';
-  toast('Brief Posted!');
-}
-function renderNews() {
-  const cont = document.getElementById('news-container');
-  const newsArr = Object.values(DB_NEWS).sort((a,b)=>b.time-a.time);
-  if(!newsArr.length) { cont.innerHTML = '<p style="color:var(--muted)">No recent briefs.</p>'; return; }
-  cont.innerHTML = newsArr.map(n => `
-    <div class="glass-panel brief-card">
-      <div class="brief-meta">${new Date(n.time).toLocaleString('th-TH')} • ${n.author}</div>
-      <div class="brief-text">${escHtml(n.text)}</div>
-    </div>
-  `).join('');
+/* ══════════════════════════════════
+   PROGRESS
+══════════════════════════════════ */
+const SUBJ_INFO={sci:{icon:'🔬',name:'วิทย์'},math:{icon:'📐',name:'คณิต'},eng:{icon:'🌐',name:'อังกฤษ'},soc:{icon:'🌏',name:'สังคม'},hist:{icon:'📜',name:'ประวัติ'},comp:{icon:'💻',name:'คอม'}};
+function updateProgressGrid(){
+  const el=document.getElementById('progressGrid');
+  if(!el)return;
+  el.innerHTML=Object.entries(SUBJ_INFO).map(([k,v])=>{
+    const d=DB_DATA[k]||{};
+    const vids=(d.videos||[]).length;
+    const quiz=(d.quizzes||[]).length;
+    return`<div class="prog-card">
+      <div class="prog-icon">${v.icon}</div>
+      <div class="prog-info">
+        <div class="prog-name">${v.name}</div>
+        <div class="prog-bar-wrap">
+          <div class="prog-bar"><div class="prog-fill vid" style="width:${vids?Math.min(100,vids*20):0}%"></div></div>
+          <div class="prog-pct" style="color:var(--ac)">${vids}</div>
+        </div>
+        <div class="prog-bar-wrap" style="margin-top:4px">
+          <div class="prog-bar"><div class="prog-fill quiz" style="width:${quiz?Math.min(100,quiz*25):0}%"></div></div>
+          <div class="prog-pct" style="color:var(--blue)">${quiz}</div>
+        </div>
+        <div class="prog-detail">${vids} วิดีโอ · ${quiz} quiz</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
-function updateProgress() {
-  let vTot=0, qTot=0;
-  ['sci','math','eng','soc','hist','comp'].forEach(s=>{
-    let c = DB_LIB[s] || {};
-    if(c.videos) vTot += Object.keys(c.videos).length;
-    if(c.quizzes) qTot += Object.keys(c.quizzes).length;
-  });
-  document.getElementById('progVidCount').textContent = vTot;
-  document.getElementById('progQuizCount').textContent = qTot;
-  // Placeholder visual logic (assume 50 is max goal for demo)
-  let vPct = Math.min((vTot/50)*100, 100);
-  let qPct = Math.min((qTot/20)*100, 100);
-  document.getElementById('progVidFill').style.width = (vPct===0?5:vPct)+'%';
-  document.getElementById('progQuizFill').style.width = (qPct===0?5:qPct)+'%';
-}
-
-/* ══════════════ COMMUNITY LOGIC ══════════════ */
-function sendChat() {
-  const text = document.getElementById('inChat').value.trim();
-  if(!text) return;
-  const dName = localStorage.getItem('3006_display_name') || user.first;
-  dbChat.push({ text: text, time: Date.now(), author: dName, no: user.no });
-  document.getElementById('inChat').value='';
-}
-function renderChat() {
-  const box = document.getElementById('chat-messages');
-  const chats = Object.values(DB_CHAT).sort((a,b)=>a.time-b.time);
-  box.innerHTML = chats.map(c => `
-    <div class="chat-msg ${c.no === user.no ? 'mine' : ''}">
-      <div class="chat-author">${escHtml(c.author)} ${c.no===27?'⭐':''}</div>
-      <div class="chat-text">${escHtml(c.text)}</div>
-      <div class="chat-time">${new Date(c.time).toLocaleTimeString('th-TH')}</div>
-    </div>
-  `).join('');
-  box.scrollTop = box.scrollHeight;
-}
-
-/* ══════════════ ORIGINAL LIBRARY & MODAL LOGIC ══════════════ */
+/* ══════════════════════════════════
+   TABLE
+══════════════════════════════════ */
 function renderTable(list){
-  document.getElementById('tbody').innerHTML=list.map((s,i)=>`
+  document.getElementById('tbody').innerHTML=list.map(s=>`
     <tr class="${s.no===27?'tr-admin':''}">
-      <td>${s.no}</td><td style="color:var(--a2)">${s.id}</td>
+      <td class="td-no">${s.no}</td>
+      <td class="td-id">${s.id}</td>
       <td>${s.first}</td><td>${s.last}</td>
-      <td>${s.no===27?'⭐ Admin':'User'}</td>
+      <td>${s.no===27?'<span style="background:rgba(78,205,196,.15);color:var(--ac);font-size:.7rem;padding:2px 8px;border-radius:999px;font-family:Prompt,sans-serif;font-weight:700">ADMIN</span>':'นักเรียน'}</td>
     </tr>`).join('');
 }
-function filterTable(q){
-  if(!q){renderTable(STUDENTS);return}
-  const f=STUDENTS.filter(s=>s.first.includes(q)||s.last.includes(q)||s.id.includes(q)||String(s.no)===q);
-  renderTable(f);
-}
+function filterTable(q){if(!q){renderTable(STUDENTS);return}renderTable(STUDENTS.filter(s=>s.first.includes(q)||s.last.includes(q)||s.id.includes(q)||String(s.no)===q))}
+
+/* ══════════════════════════════════
+   COUNTS
+══════════════════════════════════ */
 function updateCounts(){
   ['sci','math','eng','soc','hist','comp'].forEach(s=>{
-    const d=getC(s);
+    const d=DB_DATA[s]||{};
     const el=document.getElementById('cnt-'+s);
-    if(el) el.textContent=`${d.videos?Object.keys(d.videos).length:0} วิดีโอ · ${d.quizzes?Object.keys(d.quizzes).length:0} แบบทดสอบ`;
+    if(el)el.textContent=`${(d.videos||[]).length} วิดีโอ · ${(d.quizzes||[]).length} quiz`;
   });
 }
 
+/* ══════════════════════════════════
+   SUBJECT MODAL
+══════════════════════════════════ */
+function getC(s){return DB_DATA[s]||{videos:[],quizzes:[]}}
+function setC(s,d){DB_DATA[s]=d;dbRef.child(s).set(d)}
+
 function openSubject(s){
-  subj=s; document.getElementById('mTitle').textContent=SUBJ_ICONS[s];
+  subj=s;
+  document.getElementById('mTitle').textContent=SUBJ[s];
   document.getElementById('adminWrap').style.display=isAdmin?'block':'none';
-  switchContent('vids',document.querySelector('#contentTabs .tab'));
-  renderVids(); renderQuizList();
-  document.getElementById('overlay').classList.add('open'); exitQuiz();
+  switchContent('vids',document.querySelector('#contentTabs .tab2'));
+  renderVids();renderQuizList();
+  document.getElementById('overlay').classList.add('open');
+  exitQuiz();
 }
 function closeModal(){document.getElementById('overlay').classList.remove('open')}
 function overlayBg(e){if(e.target===document.getElementById('overlay'))closeModal()}
 
 function switchAdminTab(tab,btn){
-  document.querySelectorAll('#adminTabs .tab').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#adminTabs .tab2').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById('vidForm').style.display=tab==='vid'?'grid':'none';
   document.getElementById('quizForm').style.display=tab==='quiz'?'grid':'none';
 }
 function switchContent(tab,btn){
-  document.querySelectorAll('#contentTabs .tab').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
+  document.querySelectorAll('#contentTabs .tab2').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
   document.getElementById('panelVids').style.display=tab==='vids'?'block':'none';
   document.getElementById('panelQuiz').style.display=tab==='quiz'?'block':'none';
 }
 
+/* ══════════════════════════════════
+   VIDEO SOURCE
+══════════════════════════════════ */
 function switchSrc(src,btn){
   curSrc=src;
-  document.querySelectorAll('.vsrc').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.vsrc-btn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById('srcYT').style.display=src==='yt'?'block':'none';
   document.getElementById('srcFile').style.display=src==='file'?'block':'none';
+  if(src==='yt')clearFile();else document.getElementById('vUrl').value='';
 }
 
-/* ══════════════ VIDEO LOGIC ══════════════ */
-function ytId(url){ const m=url.match(/(?:youtu\.be\/|[?&]v=|embed\/)([\w-]{11})/); return m?m[1]:null; }
-function addVideo(){
+/* Drag & drop */
+(function(){
+  const z=document.getElementById('dropzone');
+  if(!z)return;
+  z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag')});
+  z.addEventListener('dragleave',()=>z.classList.remove('drag'));
+  z.addEventListener('drop',e=>{
+    e.preventDefault();z.classList.remove('drag');
+    const f=e.dataTransfer.files[0];
+    if(f&&f.type.startsWith('video/'))applyFile(f);else toast('กรุณาเลือกไฟล์วิดีโอ','err');
+  });
+})();
+function onFileChange(el){if(el.files[0])applyFile(el.files[0])}
+function applyFile(f){
+  selFile=f;
+  document.getElementById('previewVid').src=URL.createObjectURL(f);
+  document.getElementById('dropzone').style.display='none';
+  document.getElementById('filePreview').style.display='block';
+  document.getElementById('fpName').textContent='📁 '+f.name+' ('+( f.size/1024/1024).toFixed(1)+' MB)';
+}
+function clearFile(){
+  selFile=null;
+  const v=document.getElementById('previewVid');
+  if(v.src)URL.revokeObjectURL(v.src);v.src='';
+  document.getElementById('vFile').value='';
+  document.getElementById('dropzone').style.display='block';
+  document.getElementById('filePreview').style.display='none';
+}
+
+/* ══════════════════════════════════
+   ADD VIDEO
+══════════════════════════════════ */
+function ytId(url){const m=url.match(/(?:youtu\.be\/|[?&]v=|embed\/)([\w-]{11})/);return m?m[1]:null}
+async function addVideo(){
   const title=document.getElementById('vTitle').value.trim();
-  if(!title) return toast('ใส่ชื่อวิดีโอด้วยครับ','err');
+  if(!title){toast('กรุณากรอกชื่อวิดีโอ','err');return}
   if(curSrc==='yt'){
     const url=document.getElementById('vUrl').value.trim();
     const id=ytId(url);
-    if(!id) return toast('YouTube URL ไม่ถูกต้อง','err');
-    const d=getC(subj);
-    if(!d.videos) d.videos = [];
+    if(!id){toast('YouTube URL ไม่ถูกต้อง','err');return}
+    const d=getC(subj);if(!d.videos)d.videos=[];
     d.videos.push({id:Date.now(),title,type:'yt',ytId:id});
-    setC(subj,d);
-    document.getElementById('vTitle').value=''; document.getElementById('vUrl').value='';
-    toast('✅ เพิ่มวิดีโอแล้ว');
+    setC(subj,d);document.getElementById('vTitle').value='';document.getElementById('vUrl').value='';
+    renderVids();updateCounts();updateProgressGrid();toast('✅ เพิ่มวิดีโอ YouTube แล้ว');
+  }else{
+    if(!selFile){toast('กรุณาเลือกไฟล์วิดีโอ','err');return}
+    const fid='vf_'+Date.now();
+    const pw=document.getElementById('progWrap'),pf=document.getElementById('progFill'),pt=document.getElementById('progTxt');
+    pw.style.display='block';pf.style.width='30%';pt.textContent='กำลังบันทึก...';
+    try{
+      await dbSave(fid,selFile);pf.style.width='100%';pt.textContent='บันทึกสำเร็จ!';
+      const d=getC(subj);if(!d.videos)d.videos=[];
+      d.videos.push({id:Date.now(),title,type:'file',fid,fname:selFile.name,fsize:selFile.size});
+      setC(subj,d);document.getElementById('vTitle').value='';clearFile();
+      setTimeout(()=>{pw.style.display='none';pf.style.width='0%'},1000);
+      renderVids();updateCounts();updateProgressGrid();toast('✅ อัปโหลดไฟล์สำเร็จ');
+    }catch(e){pw.style.display='none';toast('เกิดข้อผิดพลาด: '+e.message,'err')}
   }
 }
+
+/* ══════════════════════════════════
+   RENDER VIDEOS
+══════════════════════════════════ */
 function renderVids(){
-  const d=getC(subj); const el=document.getElementById('vgrid');
-  let vArr = d.videos ? Object.values(d.videos) : [];
-  if(!vArr.length){ el.innerHTML=`<div class="empty">ไม่มีเนื้อหาในหมวดนี้</div>`; return; }
-  el.innerHTML=vArr.map(v=>`
-    <div class="glass-panel vcard" data-vid="${v.id}" onclick="playVid(${v.id})">
-      <div class="vthumb"><img src="https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg"><div class="vplay"><div class="vplay-btn">▶</div></div></div>
+  const d=getC(subj);
+  const el=document.getElementById('vgrid');
+  if(!d.videos||!d.videos.length){
+    el.innerHTML=`<div class="empty-state"><div class="empty-icon">📹</div><div>ยังไม่มีวิดีโอในวิชานี้</div></div>`;return;
+  }
+  el.innerHTML=d.videos.map(v=>`
+    <div class="vcard" onclick="playVid(${v.id})">
+      <div class="vthumb">
+        ${v.type==='yt'?`<img src="https://img.youtube.com/vi/${v.ytId}/hqdefault.jpg" loading="lazy" onerror="this.style.display='none'">`:`<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:2.5rem;background:var(--bg2)">🎬</div>`}
+        <div class="vplay"><div class="vplay-btn">▶</div></div>
+      </div>
       <div class="vinfo">
-        <div class="vtitle">${escHtml(v.title)}</div>
-        <div class="vmeta"><span class="vbadge yt">YouTube</span> ${isAdmin?`<button class="btn-del" onclick="event.stopPropagation();delVid(${v.id})">🗑 ลบ</button>`:''}</div>
+        <div class="vtitle">${esc(v.title)}</div>
+        <div class="vmeta">
+          ${v.type==='yt'?'<span class="vbadge yt">YouTube</span>':'<span class="vbadge file">File</span>'}
+          ${isAdmin?`<button class="btn-del" onclick="event.stopPropagation();delVid(${v.id})">🗑</button>`:''}
+        </div>
       </div>
     </div>`).join('');
 }
-function playVid(vid){
-  const d=getC(subj); let vArr = d.videos ? Object.values(d.videos) : [];
-  const v=vArr.find(x=>x.id===vid); if(!v)return;
+
+async function playVid(vid){
+  const d=getC(subj);const v=d.videos.find(x=>x.id===vid);if(!v)return;
   document.getElementById('vidLabel').textContent=v.title;
-  document.getElementById('vidContent').innerHTML=`<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${v.ytId}?autoplay=1&rel=0" allow="autoplay;fullscreen" allowfullscreen></iframe></div>`;
+  const content=document.getElementById('vidContent');
+  if(v.type==='yt'){
+    content.innerHTML=`<div class="yt-wrap"><iframe src="https://www.youtube.com/embed/${v.ytId}?autoplay=1&rel=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe></div>`;
+  }else{
+    try{
+      const file=await dbGet(v.fid);
+      if(!file){toast('ไม่พบไฟล์ — อาจต้องอัปโหลดใหม่จากเครื่องต้นทาง','err');return}
+      const url=URL.createObjectURL(file);
+      content.innerHTML=`<video class="file-vid" controls autoplay src="${url}"></video>`;
+      content.querySelector('video').onended=()=>URL.revokeObjectURL(url);
+    }catch(e){toast('โหลดวิดีโอไม่ได้: '+e.message,'err');return}
+  }
   document.getElementById('vidOverlay').classList.add('open');
 }
 function closeVid(e,force){
   if(force||(e&&e.target===document.getElementById('vidOverlay'))){
     document.getElementById('vidOverlay').classList.remove('open');
-    document.getElementById('vidContent').innerHTML='';
+    const c=document.getElementById('vidContent');
+    const iframe=c.querySelector('iframe');if(iframe)iframe.src=iframe.src;
+    const vid=c.querySelector('video');if(vid){URL.revokeObjectURL(vid.src);vid.src=''}
+    c.innerHTML='';
   }
 }
-function delVid(id){
-  const d=getC(subj);
-  if(d.videos) {
-    const key = Object.keys(d.videos).find(k => d.videos[k].id === id);
-    if(key) { delete d.videos[key]; setC(subj,d); toast('ลบแล้ว'); }
-  }
+async function delVid(id){
+  const d=getC(subj);const v=d.videos.find(x=>x.id===id);
+  if(v&&v.type==='file')await dbDel(v.fid);
+  d.videos=d.videos.filter(x=>x.id!==id);
+  setC(subj,d);renderVids();updateCounts();updateProgressGrid();toast('ลบวิดีโอแล้ว');
 }
 
-/* ══════════════ QUIZ LOGIC ══════════════ */
-function addQ(){ tempQs.push({qid:Date.now(),text:'',opts:['','','',''],correct:0}); renderQForm(); }
-function removeQ(i){ tempQs.splice(i,1); renderQForm(); }
+/* ══════════════════════════════════
+   QUIZ BUILDER
+══════════════════════════════════ */
+function addQ(){tempQs.push({qid:Date.now(),text:'',opts:['','','',''],correct:0});renderQForm()}
+function removeQ(i){tempQs.splice(i,1);renderQForm()}
 function renderQForm(){
   document.getElementById('qContainer').innerHTML=tempQs.map((q,i)=>`
-    <div class="glass-panel qrow">
-      <div class="qrow-hd"><span>คำถามที่ ${i+1}</span><button class="btn-rm" onclick="removeQ(${i})">✕</button></div>
-      <input class="input-3d" placeholder="คำถาม..." value="${escHtml(q.text)}" oninput="tempQs[${i}].text=this.value">
-      <div class="opts2">
-        ${[0,1,2,3].map(j=>`
-          <div class="opt-row"><input type="radio" name="c${i}" ${q.correct===j?'checked':''} onchange="tempQs[${i}].correct=${j}">
-          <input class="input-3d" style="padding:6px 10px;" placeholder="ช้อยส์ ${j+1}" value="${escHtml(q.opts[j])}" oninput="tempQs[${i}].opts[${j}]=this.value"></div>
-        `).join('')}
+    <div class="qrow">
+      <div class="qrow-hd"><span>คำถามที่ ${i+1}</span><button class="btn-rm" onclick="removeQ(${i})">✕ ลบ</button></div>
+      <input placeholder="คำถาม..." value="${esc(q.text)}" oninput="tempQs[${i}].text=this.value" class="af-input" style="margin-bottom:0">
+      <div class="opts2grid">
+        ${[0,1,2,3].map(j=>`<div class="opt-row">
+          <input type="radio" name="c${i}" ${q.correct===j?'checked':''} onchange="tempQs[${i}].correct=${j}">
+          <input class="opt-input" placeholder="ตัวเลือก ${j+1}" value="${esc(q.opts[j])}" oninput="tempQs[${i}].opts[${j}]=this.value">
+        </div>`).join('')}
       </div>
+      <div style="font-size:.72rem;color:var(--em)">✓ เลือกตัวเลือกที่ถูกต้อง</div>
     </div>`).join('');
 }
 function saveQuiz(){
   const title=document.getElementById('qTitle').value.trim();
-  if(!title || !tempQs.length || !tempQs.every(q=>q.text&&q.opts.every(o=>o))) return toast('กรอกข้อมูลไม่ครบ','err');
-  const d=getC(subj); if(!d.quizzes) d.quizzes = [];
+  if(!title){toast('กรุณาตั้งชื่อแบบทดสอบ','err');return}
+  if(!tempQs.length){toast('กรุณาเพิ่มอย่างน้อย 1 คำถาม','err');return}
+  if(!tempQs.every(q=>q.text&&q.opts.every(o=>o))){toast('กรอกคำถามและตัวเลือกให้ครบ','err');return}
+  const d=getC(subj);if(!d.quizzes)d.quizzes=[];
   d.quizzes.push({id:Date.now(),title,questions:JSON.parse(JSON.stringify(tempQs))});
-  setC(subj,d); document.getElementById('qTitle').value=''; tempQs=[]; renderQForm(); toast('✅ สร้างชุดทดสอบแล้ว');
-}
-function renderQuizList(){
-  const d=getC(subj); const el=document.getElementById('qlistEl');
-  document.getElementById('quizPlay').style.display='none'; el.style.display='flex';
-  let qArr = d.quizzes ? Object.values(d.quizzes) : [];
-  if(!qArr.length){ el.innerHTML=`<div class="empty">ไม่มีชุดทดสอบ</div>`; return; }
-  el.innerHTML=qArr.map(q=>`
-    <div class="glass-panel qitem">
-      <div><div class="qname">${escHtml(q.title)}</div><div class="qmeta">${q.questions.length} ข้อ ${isAdmin?`<button class="btn-del" style="margin-left:10px" onclick="delQuiz(${q.id})">🗑 ลบ</button>`:''}</div></div>
-      <button class="gold-btn" style="padding:6px 15px;" onclick="startQuiz(${q.id})">เริ่มทำ</button>
-    </div>`).join('');
-}
-function delQuiz(id){
-  const d=getC(subj);
-  if(d.quizzes) {
-    const key = Object.keys(d.quizzes).find(k => d.quizzes[k].id === id);
-    if(key) { delete d.quizzes[key]; setC(subj,d); toast('ลบแล้ว'); }
-  }
+  setC(subj,d);document.getElementById('qTitle').value='';
+  tempQs=[];renderQForm();renderQuizList();updateCounts();updateProgressGrid();toast('✅ บันทึกแบบทดสอบแล้ว');
 }
 
+/* ══════════════════════════════════
+   QUIZ LIST + PLAY
+══════════════════════════════════ */
+function renderQuizList(){
+  const d=getC(subj);
+  const el=document.getElementById('qlistEl');
+  document.getElementById('quizPlay2').style.display='none';el.style.display='flex';
+  if(!d.quizzes||!d.quizzes.length){el.innerHTML=`<div class="empty-state"><div class="empty-icon">📝</div><div>ยังไม่มีแบบทดสอบ</div></div>`;return}
+  el.innerHTML=d.quizzes.map(q=>`
+    <div class="qitem2">
+      <div>
+        <div class="q-name">${esc(q.title)}</div>
+        <div class="q-meta">${q.questions.length} ข้อ${isAdmin?` <button class="btn-del" onclick="delQuiz(${q.id})" style="margin-left:10px">🗑</button>`:''}</div>
+      </div>
+      <button class="btn-start2" onclick="startQuiz(${q.id})">เริ่มทำ →</button>
+    </div>`).join('');
+}
+function delQuiz(id){const d=getC(subj);d.quizzes=d.quizzes.filter(q=>q.id!==id);setC(subj,d);renderQuizList();updateCounts();updateProgressGrid();toast('ลบแบบทดสอบแล้ว')}
 function startQuiz(id){
-  const d=getC(subj); let qArr = d.quizzes ? Object.values(d.quizzes) : [];
-  curQuiz=qArr.find(q=>q.id===id); if(!curQuiz)return;
-  qIdx=0; qOk=0;
+  const d=getC(subj);curQuiz=d.quizzes.find(q=>q.id===id);if(!curQuiz)return;
+  qIdx=0;qOk=0;
   document.getElementById('qPlayTitle').textContent=curQuiz.title;
   document.getElementById('qlistEl').style.display='none';
-  document.getElementById('quizPlay').style.display='block';
+  document.getElementById('quizPlay2').style.display='block';
   document.getElementById('qQuestionView').style.display='block';
   document.getElementById('qResult').style.display='none';
   showQ();
 }
 function showQ(){
-  const q=curQuiz.questions[qIdx]; const tot=curQuiz.questions.length;
-  document.getElementById('qN').textContent=qIdx+1; document.getElementById('qT').textContent=tot; document.getElementById('qS').textContent=qOk;
-  document.getElementById('qProg').style.width=(qIdx/tot*100)+'%'; document.getElementById('qText').textContent=q.text;
-  document.getElementById('optsList').innerHTML=q.opts.map((o,i)=>`<button class="glass-panel obtn" style="text-align:left; border-color:var(--border);" onclick="answerQ(${i})">${['A','B','C','D'][i]}. ${escHtml(o)}</button>`).join('');
+  const q=curQuiz.questions[qIdx],tot=curQuiz.questions.length;
+  document.getElementById('qN').textContent=qIdx+1;
+  document.getElementById('qT').textContent=tot;
+  document.getElementById('qS').textContent=qOk;
+  document.getElementById('qProg').style.width=(qIdx/tot*100)+'%';
+  document.getElementById('qText').textContent=q.text;
+  document.getElementById('optsList').innerHTML=q.opts.map((o,i)=>`<button class="obtn2" onclick="answerQ(${i})">${['A','B','C','D'][i]}. ${esc(o)}</button>`).join('');
 }
-function answerQ(c){
-  const q=curQuiz.questions[qIdx]; const btns=document.querySelectorAll('.obtn'); btns.forEach(b=>b.disabled=true);
-  btns[q.correct].style.borderColor = 'var(--em)'; btns[q.correct].style.background = 'rgba(16,185,129,.2)';
-  if(c!==q.correct) { btns[c].style.borderColor = 'var(--red)'; btns[c].style.background = 'rgba(244,63,94,.2)'; } else qOk++;
+function answerQ(chosen){
+  const q=curQuiz.questions[qIdx];
+  const btns=document.querySelectorAll('.obtn2');
+  btns.forEach(b=>b.disabled=true);
+  btns[q.correct].classList.add('correct');
+  if(chosen!==q.correct)btns[chosen].classList.add('wrong');else qOk++;
   setTimeout(()=>{qIdx++;qIdx<curQuiz.questions.length?showQ():showResult()},900);
 }
 function showResult(){
-  document.getElementById('qQuestionView').style.display='none'; document.getElementById('qResult').style.display='block';
-  const tot=curQuiz.questions.length; const pct=Math.round(qOk/tot*100);
-  document.getElementById('scoreNum').textContent=`${qOk}/${tot}`;
-  document.getElementById('scoreRing').style.background = `conic-gradient(var(--a) ${pct}%, var(--surface) 0)`;
-  document.getElementById('scoreMsg').textContent=pct>=80?'🎉 ยอดเยี่ยม!':pct>=50?'👍 ผ่านเกณฑ์':'📚 ลองใหม่นะ';
+  document.getElementById('qQuestionView').style.display='none';
+  document.getElementById('qResult').style.display='block';
+  const tot=curQuiz.questions.length,pct=Math.round(qOk/tot*100);
+  document.getElementById('scoreNum').textContent=qOk+'/'+tot;
+  document.getElementById('scoreRing').style.setProperty('--p',pct+'%');
+  document.getElementById('scoreMsg').textContent=pct>=80?'🎉 ยอดเยี่ยม!':pct>=60?'👍 ทำได้ดี!':pct>=40?'📚 ลองใหม่นะ!':'💪 ไม่ต้องท้อ!';
+  document.getElementById('scoreDet').textContent='ตอบถูก '+qOk+' จาก '+tot+' ข้อ ('+pct+'%)';
 }
 function retryQuiz(){startQuiz(curQuiz.id)}
-function exitQuiz(){ document.getElementById('quizPlay').style.display='none'; document.getElementById('qlistEl').style.display='flex'; curQuiz=null; }
+function exitQuiz(){document.getElementById('quizPlay2').style.display='none';document.getElementById('qlistEl').style.display='flex';curQuiz=null}
 
-function toast(msg){
-  const el=document.getElementById('toast'); el.textContent=msg; el.className='show';
-  setTimeout(()=>el.className='',3000);
+/* ══════════════════════════════════
+   COMMUNITY
+══════════════════════════════════ */
+function updateCharCount(){
+  const v=document.getElementById('commInput').value;
+  document.getElementById('charCount').textContent=v.length+' / 400';
 }
-function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function submitPost(){
+  if(!user)return;
+  const text=document.getElementById('commInput').value.trim();
+  if(!text){toast('กรุณาเขียนข้อความ','err');return}
+  if(text.length>400){toast('ข้อความยาวเกินไป','err');return}
+  const id='p_'+Date.now();
+  const dn=localStorage.getItem('dn_'+user.no)||user.first;
+  communityRef.child(id).set({id,text,author:dn,authorNo:user.no,ts:Date.now(),likes:{}});
+  document.getElementById('commInput').value='';
+  document.getElementById('charCount').textContent='0 / 400';
+  toast('✅ โพสต์แล้ว');
+}
+function toggleLike(postId){
+  if(!user)return;
+  const post=communityPosts[postId];if(!post)return;
+  const likes=post.likes||{};
+  const key='u'+user.no;
+  if(likes[key])communityRef.child(postId+'/likes/'+key).remove();
+  else communityRef.child(postId+'/likes/'+key).set(true);
+}
+function deletePost(id){communityRef.child(id).remove();toast('ลบโพสต์แล้ว')}
+function renderCommunity(){
+  const posts=Object.values(communityPosts).sort((a,b)=>b.ts-a.ts);
+  const el=document.getElementById('commFeed');
+  if(!posts.length){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--tx3);font-size:.88rem">ยังไม่มีโพสต์ มาเริ่มพูดคุยกันเลย!</div>';return}
+  el.innerHTML=posts.map(p=>{
+    const likes=Object.keys(p.likes||{}).length;
+    const liked=user&&(p.likes||{})['u'+user.no];
+    const canDel=isAdmin||(user&&user.no===p.authorNo);
+    return`<div class="comm-post">
+      <div class="comm-post-hd">
+        <div class="comm-ava">${(p.author||'?').charAt(0)}</div>
+        <div>
+          <div class="comm-name">${esc(p.author||'?')}</div>
+        </div>
+        <div class="comm-time">${timeAgo(p.ts)}</div>
+      </div>
+      <div class="comm-text">${esc(p.text)}</div>
+      <div class="comm-actions">
+        <button class="comm-like-btn${liked?' liked':''}" onclick="toggleLike('${p.id}')">♥ ${likes}</button>
+        ${canDel?`<button class="comm-del-btn" onclick="deletePost('${p.id}')">🗑 ลบ</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
 
-/* ══════════════ INITIALIZE ══════════════ */
+/* ══════════════════════════════════
+   UTILITIES
+══════════════════════════════════ */
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function timeAgo(ts){
+  const d=Date.now()-ts;
+  if(d<60000)return'เมื่อกี้';
+  if(d<3600000)return Math.floor(d/60000)+' นาทีที่แล้ว';
+  if(d<86400000)return Math.floor(d/3600000)+' ชั่วโมงที่แล้ว';
+  return Math.floor(d/86400000)+' วันที่แล้ว';
+}
+let _tt;
+function toast(msg,type='ok'){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='show '+type;
+  clearTimeout(_tt);_tt=setTimeout(()=>el.className='',3000);
+}
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
 applySettings();
+initDB();
 checkAutoLogin();
 </script>
 </body>
