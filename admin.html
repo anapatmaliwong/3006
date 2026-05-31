@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark" data-style="solid">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin · 3006</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.22.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@200;300;400;600;700;800;900&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<!-- Note: This file is only served by server.js after verifying admin JWT -->
+
+<nav id="navbar" class="show"></nav>
+<div id="burgerMenu"></div>
+
+<div class="adm-v3-page">
+  <div class="adm-v3-header">
+    <div class="adm-v3-title">⚙️ Admin Control Center</div>
+    <div class="adm-v3-sub">ควบคุมทุกอย่างใน 3006</div>
+  </div>
+
+  <!-- Members table -->
+  <div class="adm-sec">
+    <div class="adm-sec-title">👥 สมาชิกทั้งหมด</div>
+    <input class="adm-search" placeholder="🔍 ค้นหา..." oninput="admFilterMembers(this.value)">
+    <div class="adm-table-wrap">
+      <table class="adm-table" id="admMembersTable">
+        <thead><tr>
+          <th>เลขที่</th><th>ชื่อ</th><th>นามสกุล</th>
+          <th>XP</th><th>Rank</th><th>Display Name</th><th>Role</th>
+        </tr></thead>
+        <tbody id="admMembersTbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Content overview -->
+  <div class="adm-sec">
+    <div class="adm-sec-title">📚 เนื้อหาทั้งหมด</div>
+    <div class="adm-content-grid" id="admContentGrid"></div>
+  </div>
+
+  <!-- XP management -->
+  <div class="adm-sec">
+    <div class="adm-sec-title">⭐ XP Management</div>
+    <div class="adm-xp-form">
+      <select class="adm-select" id="admXPTarget">
+        <option value="">เลือกนักเรียน...</option>
+      </select>
+      <input class="adm-input" type="number" id="admXPAmount" placeholder="จำนวน XP (+/-)">
+      <button class="adm-btn" onclick="admAdjustXP()">ปรับ XP</button>
+      <button class="adm-btn red" onclick="admResetXP()">Reset XP</button>
+    </div>
+  </div>
+
+  <!-- Danger zone -->
+  <div class="adm-sec adm-danger">
+    <div class="adm-sec-title">🔴 Danger Zone</div>
+    <div class="adm-danger-row">
+      <button class="adm-btn red" onclick="admClearCommunity()">🗑 ล้าง Community</button>
+      <button class="adm-btn red" onclick="admClearBriefs()">🗑 ล้างประกาศ</button>
+      <button class="adm-btn red" onclick="admResetAllXP()">🗑 Reset XP ทุกคน</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/shared.js"></script>
+<script src="/js/navbar.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>

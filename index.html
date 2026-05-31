@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark" data-style="solid">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>3006 · AC Library</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.22.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@200;300;400;600;700;800;900&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+<style>
+/* ── Welcome screen overrides ── */
+#wContinueBtn {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  z-index: 200 !important;
+  position: relative !important;
+}
+#welcomeUI { z-index: 50 !important; pointer-events: auto !important; }
+#welcomeVideo { pointer-events: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ══ WELCOME SCREEN ══ -->
+<div id="welcomeScreen">
+  <video id="welcomeVideo" playsinline muted style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;z-index:5;pointer-events:none">
+    <source src="/assets/welcome.mp4" type="video/mp4">
+  </video>
+  <div id="wFadeOverlay" style="position:absolute;inset:0;z-index:20;background:#fff;opacity:0;pointer-events:none;transition:opacity .45s ease"></div>
+  <div id="welcomeUI">
+    <div class="w-eyebrow">Assumption College · ปีการศึกษา 2569</div>
+    <h1 class="w-title">Welcome</h1>
+    <p class="w-sub">ม.3/6 · 3006 Digital Library</p>
+    <button id="wContinueBtn" onclick="startWelcomeVideo()">
+      เข้าสู่ห้องเรียน <span class="w-arrow">›</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══ LOGIN PAGE ══ -->
+<div id="loginPage" style="display:none; position:fixed;inset:0;z-index:1000;background:radial-gradient(circle at 50% 30%,#1a1510,#050403);display:flex;align-items:center;justify-content:center">
+  <div class="lb-wrap">
+    <div class="lb-glow"></div>
+    <div class="lb">
+      <div class="lb-logo">3006</div>
+      <div class="lb-sub">โรงเรียนอัสสัมชัญ · ม.3/6</div>
+      <div class="lb-rule"></div>
+      <div class="lf">
+        <label>เลขที่</label>
+        <input type="number" id="inNo" placeholder="1 – 35" min="1" max="35">
+      </div>
+      <div class="lf">
+        <label>รหัสประจำตัว</label>
+        <input type="password" id="inPass" placeholder="กรอกรหัส">
+      </div>
+      <button class="lb-btn" id="loginBtn" onclick="doLogin()">เข้าสู่ระบบ</button>
+      <div class="lb-err" id="loginErr" style="display:none">❌ เลขที่หรือรหัสไม่ถูกต้อง</div>
+      <div class="lb-hint">Username = เลขที่ · Password = รหัสประจำตัว</div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ── Welcome screen — defined before anything else ── */
+window.startWelcomeVideo = function() {
+  try {
+    var ws = document.getElementById('welcomeScreen');
+    var ui = document.getElementById('welcomeUI');
+    var vid= document.getElementById('welcomeVideo');
+    var fad= document.getElementById('wFadeOverlay');
+    sessionStorage.setItem('w3006_seen','1');
+    if(ui){ui.style.transition='opacity .42s ease, transform .42s ease';ui.style.opacity='0';ui.style.transform='scale(.95)';ui.style.pointerEvents='none';}
+    function revealLogin(){
+      if(fad){fad.style.opacity='1';}
+      setTimeout(function(){
+        if(ws) ws.style.display='none';
+        document.getElementById('loginPage').style.display='flex';
+        document.getElementById('inNo').focus();
+      },430);
+    }
+    setTimeout(function(){
+      if(ui) ui.style.display='none';
+      if(!vid){revealLogin();return;}
+      vid.style.opacity='1'; vid.style.transition='opacity .35s ease';
+      var p=vid.play(); if(p&&p.catch)p.catch(revealLogin);
+      var done=false;
+      vid.addEventListener('timeupdate',function(){
+        if(done||!vid.duration)return;
+        if((vid.duration-vid.currentTime)<=0.9){
+          done=true;
+          vid.style.animation='vidBurst .9s cubic-bezier(.4,0,.2,1) forwards';
+          setTimeout(function(){if(fad){fad.style.transition='opacity .4s ease';fad.style.opacity='1';}},300);
+        }
+      });
+      vid.addEventListener('ended',revealLogin);
+      setTimeout(revealLogin,14000);
+    },430);
+  }catch(e){
+    var s=document.getElementById('welcomeScreen');
+    if(s)s.style.display='none';
+    document.getElementById('loginPage').style.display='flex';
+  }
+};
+
+/* ── Init welcome ── */
+(function(){
+  var ws=document.getElementById('welcomeScreen');
+  if(!ws)return;
+  if(sessionStorage.getItem('w3006_seen')){
+    ws.style.display='none';
+    document.getElementById('loginPage').style.display='flex';
+    return;
+  }
+  document.body.style.overflow='hidden';
+})();
+
+/* ── Login ── */
+async function doLogin() {
+  const no  = document.getElementById('inNo').value.trim();
+  const pw  = document.getElementById('inPass').value.trim();
+  const err = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
+  err.style.display = 'none';
+  if (!no || !pw) { err.textContent='กรุณากรอกข้อมูลให้ครบ'; err.style.display='block'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'กำลังเข้าสู่ระบบ...';
+
+  try {
+    const res = await fetch('/api/auth/login', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ no, password: pw })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      err.textContent = data.error || 'เลขที่หรือรหัสไม่ถูกต้อง';
+      err.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'เข้าสู่ระบบ';
+      return;
+    }
+    // Save token
+    localStorage.setItem('3006_token', data.token);
+    // Redirect to lobby
+    window.location.href = '/lobby.html';
+  } catch(e) {
+    err.textContent = 'เชื่อมต่อ server ไม่ได้';
+    err.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'เข้าสู่ระบบ';
+  }
+}
+
+// Handle URL params (redirect reasons)
+const params = new URLSearchParams(window.location.search);
+if (params.get('reason') === 'expired') {
+  sessionStorage.setItem('w3006_seen','1');
+  document.getElementById('welcomeScreen').style.display='none';
+  document.getElementById('loginPage').style.display='flex';
+  document.getElementById('loginErr').textContent = 'Session หมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง';
+  document.getElementById('loginErr').style.display = 'block';
+}
+
+// Enter key
+['inNo','inPass'].forEach(id => {
+  document.getElementById(id)?.addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+});
+
+// Check if already logged in
+(async function(){
+  const token = localStorage.getItem('3006_token');
+  if (!token) return;
+  try {
+    const res = await fetch('/api/auth/me', { headers:{ Authorization:'Bearer '+token } });
+    if (res.ok) window.location.href = '/lobby.html';
+  } catch {}
+})();
+</script>
+</body>
+</html>

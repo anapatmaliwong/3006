@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark" data-style="solid">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Lobby · 3006</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.22.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@200;300;400;600;700;800;900&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav id="navbar" class="show"></nav>
+<div id="burgerMenu"></div>
+
+<!-- ── Lobby Content ── -->
+<div id="billboard">
+  <div id="bannerSlides"></div>
+  <button class="admin-banner-btn" id="adminBannerBtn" onclick="openBannerModal()" style="display:none">
+    <i class="ti ti-pencil"></i>
+  </button>
+  <button class="banner-nav left" onclick="bannerPrev()">‹</button>
+  <button class="banner-nav right" onclick="bannerNext()">›</button>
+  <div class="banner-controls" id="bannerDots"></div>
+  <div class="billboard-fade"></div>
+</div>
+
+<div class="lv5-body">
+  <div class="lv5-hero">
+    <div class="lv5-logo-col">
+      <div class="lv5-logo">3006</div>
+      <div class="lv5-logo-sub">ห้องเรียนดิจิทัล · โรงเรียนอัสสัมชัญ</div>
+    </div>
+    <div class="lv5-player-card" id="lobbyPlayerCard">
+      <div class="lv5-pc-top">
+        <div class="lv5-ava-wrap" onclick="document.getElementById('profilePicInput').click()" title="เปลี่ยนรูปโปรไฟล์">
+          <div class="lv5-ava" id="lpcAva">?</div>
+          <div class="lv5-ava-overlay"><i class="ti ti-camera"></i></div>
+          <input type="file" id="profilePicInput" accept="image/*" style="display:none" onchange="uploadProfilePic(this)">
+        </div>
+        <div class="lv5-player-info">
+          <div class="lv5-player-name" id="lpcName">-</div>
+          <div class="lv5-player-rank" id="lpcRank">Novice · Lv.1</div>
+        </div>
+      </div>
+      <div class="lv5-xp-section">
+        <div class="lv5-xp-row">
+          <span class="lv5-xp-label">XP</span>
+          <span class="lv5-xp-val"><span id="lpcXP">0</span> <span class="lv5-xp-sep">/</span> <span id="lpcXPMax">100</span></span>
+        </div>
+        <div class="lv5-xp-track"><div class="lv5-xp-fill" id="lpcXPFill"></div></div>
+      </div>
+      <div class="lv5-stats-row">
+        <div class="lv5-stat">
+          <i class="ti ti-player-play" style="color:#4ecdc4"></i>
+          <div class="lv5-stat-val" id="lpcVid">0</div>
+          <div class="lv5-stat-lbl">Episodes</div>
+        </div>
+        <div class="lv5-stat">
+          <i class="ti ti-sword" style="color:#a78bfa"></i>
+          <div class="lv5-stat-val" id="lpcQuiz">0</div>
+          <div class="lv5-stat-lbl">Quests</div>
+        </div>
+        <div class="lv5-stat">
+          <i class="ti ti-star" style="color:#fbbf24"></i>
+          <div class="lv5-stat-val" id="lpcTotal">0</div>
+          <div class="lv5-stat-lbl">Total XP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin actions -->
+  <div class="admin-lobby-actions" id="adminLobbyActions" style="display:none">
+    <button class="alb-btn" onclick="openBriefModal()"><i class="ti ti-speakerphone" style="color:#60a5fa"></i> โพสต์ประกาศ</button>
+    <button class="alb-btn" onclick="openBannerModal()"><i class="ti ti-photo" style="color:#a78bfa"></i> แก้ไข Banner</button>
+    <button class="alb-btn gold" onclick="goPage('admin')"><i class="ti ti-shield" style="color:#f59e0b"></i> Admin Panel</button>
+    <button class="alb-btn" onclick="openLobbyEditor()" style="background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.25);color:#a78bfa"><i class="ti ti-layout" style="color:#a78bfa"></i> แต่ง Lobby</button>
+  </div>
+
+  <!-- Custom cards -->
+  <div id="lobbyCustomSection"></div>
+
+  <!-- Announcements -->
+  <div class="lv5-sect">
+    <div class="lv5-sect-hd">
+      <i class="ti ti-speakerphone lv5-sect-ic" style="color:#60a5fa"></i>
+      <span class="lv5-sect-title">ประกาศ &amp; ข่าวสาร</span>
+      <div class="lv5-count-pill" id="briefCount">0</div>
+    </div>
+    <div id="briefList"><div class="brief-empty">กำลังโหลด...</div></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="lv5-sect">
+    <div class="lv5-sect-hd">
+      <i class="ti ti-chart-bar lv5-sect-ic" style="color:#4ecdc4"></i>
+      <span class="lv5-sect-title">ความคืบหน้าการเรียน</span>
+      <span class="lv5-sect-hint">คลิกเพื่อเข้าวิชา</span>
+    </div>
+    <div class="lv5-prog-grid" id="progressGrid"></div>
+  </div>
+</div>
+
+<!-- Brief modal, Banner modal, Lobby editor modal (shared) -->
+<div id="briefModal" class="overlay" onclick="if(e.target===this)closeBriefModal()"><!-- populated by JS --></div>
+<div id="bannerModal" onclick="if(event.target===this)closeBannerModal(event)"><!-- populated by JS --></div>
+<div id="lobbyEditorModal" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.87);backdrop-filter:blur(14px);align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto"><!-- populated by JS --></div>
+
+<div id="toast"></div>
+
+<!-- Scripts -->
+<script src="/js/api.js"></script>
+<script src="/js/shared.js"></script>
+<script src="/js/navbar.js"></script>
+<script src="/js/lobby.js"></script>
+</body>
+</html>

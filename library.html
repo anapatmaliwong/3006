@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark" data-style="solid">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Library · 3006</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.22.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@200;300;400;600;700;800;900&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<nav id="navbar" class="show"></nav>
+<div id="burgerMenu"></div>
+
+<!-- Zone Loader -->
+<div id="zoneLoader" style="display:none">
+  <div class="zl-art-bg" id="zlBg"></div>
+  <div class="zl-particles" id="zlParticles"></div>
+  <div class="zl-scan-lines"></div>
+  <div class="zl-content">
+    <div class="zl-zone-id" id="zlZoneId">ZONE 01</div>
+    <div class="zl-icon-wrap" id="zlIconWrap">
+      <i class="ti zl-icon" id="zlIcon"></i>
+    </div>
+    <div class="zl-name" id="zlName">วิทยาศาสตร์</div>
+    <div class="zl-en" id="zlEn">Science Lab</div>
+    <div class="zl-loading-row">
+      <span class="zl-loading-txt">LOADING ZONE</span>
+      <span class="zl-pct" id="zlPct">0%</span>
+    </div>
+    <div class="zl-bar-wrap"><div class="zl-bar"><div class="zl-fill" id="zlFill"></div></div></div>
+  </div>
+</div>
+
+<!-- Library page content -->
+<div class="glib-page">
+  <!-- Player HUD -->
+  <div class="glib-hud">
+    <div class="hud-player">
+      <div class="hud-ava" id="hudAva">?</div>
+      <div class="hud-info">
+        <div class="hud-name" id="hudName">-</div>
+        <div class="hud-rank" id="hudRank">Novice · Lv.1</div>
+      </div>
+    </div>
+    <div class="hud-xp-wrap">
+      <div class="hud-xp-label">XP <span id="hudXP">0</span> / <span id="hudXPMax">100</span></div>
+      <div class="hud-xp-bar"><div class="hud-xp-fill" id="hudXPFill"></div></div>
+    </div>
+    <div class="hud-stats">
+      <div class="hud-stat"><div class="hs-val" id="hudTotalVid">0</div><div class="hs-lbl">Videos</div></div>
+      <div class="hud-stat"><div class="hs-val" id="hudTotalQuiz">0</div><div class="hs-lbl">Quizzes</div></div>
+      <div class="hud-stat"><div class="hs-val" id="hudStreak">0</div><div class="hs-lbl">Zones</div></div>
+    </div>
+  </div>
+
+  <!-- Mission Board -->
+  <div class="glib-board-title">
+    <div class="gbt-line"></div>
+    <div class="gbt-text"><i class="ti ti-sword" style="color:#4ecdc4;margin-right:8px"></i>MISSION BOARD</div>
+    <div class="gbt-line"></div>
+  </div>
+
+  <!-- Zone Cards -->
+  <div class="glib-grid" id="zoneGrid">
+    <!-- populated by library.js -->
+  </div>
+
+  <!-- Leaderboard -->
+  <div id="dramabLB">
+    <div class="dlb-header">
+      <div class="dlb-title"><i class="ti ti-trophy" style="color:#fbbf24;margin-right:8px"></i>LEADERBOARD</div>
+      <div class="dlb-sub">CLASS ม.3/6 · TOTAL XP RANKING</div>
+    </div>
+    <div class="dlb-podium" id="dlbPodium"><div class="dlb-loading">กำลังโหลด...</div></div>
+    <div class="dlb-list" id="dlbList"></div>
+  </div>
+</div>
+
+<!-- Zone Modal (full screen) -->
+<div class="overlay" id="overlay" onclick="overlayBg(event)">
+  <div class="modal">
+    <div class="modal-hd" id="mTitle"></div><!-- hero built by library.js -->
+    <div class="zone-nav-tabs" id="zoneNavTabs">
+      <button class="znt-btn on" id="znt-ep" onclick="zoneTabSwitch('vids',this)">
+        <i class="ti ti-player-play"></i> EPISODES
+      </button>
+      <button class="znt-btn" id="znt-qu" onclick="zoneTabSwitch('quiz',this)">
+        <i class="ti ti-sword"></i> QUESTS
+      </button>
+      <button class="znt-btn znt-admin" id="znt-adm" onclick="zoneTabSwitch('admin',this)" style="display:none">
+        <i class="ti ti-settings-2"></i> ADMIN
+      </button>
+    </div>
+    <div class="modal-body">
+      <!-- Admin panel -->
+      <div id="adminWrap" class="admin-wrap" style="display:none"><!-- populated by library.js --></div>
+      <!-- Episodes -->
+      <div id="panelVids"><div id="vgrid" class="vgrid"></div></div>
+      <!-- Quests -->
+      <div id="panelQuiz" style="display:none">
+        <div id="qlistEl" class="qlist"></div>
+        <div id="quizPlay2" style="display:none"><!-- quiz play UI --></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quiz fullscreen -->
+<div id="quizFullscreen" style="display:none">
+  <div id="qfEdge"></div>
+  <div id="qfInner"><!-- populated by library.js --></div>
+</div>
+
+<!-- Quiz Mode Modal -->
+<div id="quizModeModal"><!-- populated by library.js --></div>
+
+<!-- Video overlay -->
+<div id="vidOverlay" onclick="closeVid(event)">
+  <div class="vid-box">
+    <div id="vidLabel"></div>
+    <div id="vidContent"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/shared.js"></script>
+<script src="/js/navbar.js"></script>
+<script src="/js/library.js"></script>
+</body>
+</html>
