@@ -19,8 +19,7 @@ window.startWelcomeVideo=function(){
       if(f){f.style.transition='opacity .4s';f.style.opacity='1';}
       setTimeout(function(){
         if(s)s.style.display='none';document.body.style.overflow='';
-        var lp=document.getElementById('loginPage');if(lp)lp.style.display='flex';
-        var inp=document.getElementById('inNo');if(inp)inp.focus();
+        var lp=document.getElementById('loginPage');if(lp)lp.style.display='none';
       },430);
     }
     setTimeout(function(){
@@ -40,7 +39,7 @@ window.startWelcomeVideo=function(){
   }catch(e){
     var s2=document.getElementById('welcomeScreen');if(s2)s2.style.display='none';
     document.body.style.overflow='';
-    var lp2=document.getElementById('loginPage');if(lp2)lp2.style.display='flex';
+    var lp2=document.getElementById('loginPage');if(lp2)lp2.style.display='none';
   }
 };
 </script>
@@ -725,7 +724,7 @@ input,textarea,select{font-family:inherit;outline:none}
 </div>
 
 <!-- LOGIN -->
-<div id="loginPage">
+<div id="loginPage" style="display:none">
   <div class="lb">
     <div class="lb-logo">3006</div>
     <div class="lb-sub">โรงเรียนอัสสัมชัญ · ม.3/6</div>
@@ -1043,6 +1042,7 @@ input,textarea,select{font-family:inherit;outline:none}
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script>
 /* ════════════════════════════════════════════════════════════════
    3006 WORLD — Game Engine (single isolated IIFE, zero globals leak)
@@ -1051,7 +1051,15 @@ input,textarea,select{font-family:inherit;outline:none}
 "use strict";
 
 /* ── Firebase ── */
-var fbConfig={apiKey:"AIzaSyCRSyVo_JcxGKw_7hERzxVi9T68TUgUibQ",authDomain:"ac-library-c63ee.firebaseapp.com",databaseURL:"https://ac-library-c63ee-default-rtdb.firebaseio.com",projectId:"ac-library-c63ee",storageBucket:"ac-library-c63ee.firebasestorage.app",messagingSenderId:"839731834004",appId:"1:839731834004:web:c5bcd84db9a6fa836ed881"};
+var fbConfig={
+  apiKey: "AIzaSyAK7hHbowArjD7tQlinwgItiplQ21C8vkk",
+  authDomain: "head-face-login.firebaseapp.com",
+  projectId: "head-face-login",
+  storageBucket: "head-face-login.firebasestorage.app",
+  messagingSenderId: "1068435597250",
+  appId: "1:1068435597250:web:c0a6294ce815fdee18d85b",
+  measurementId: "G-T57378XRMY"
+};
 var DB=null, fbReady=false;
 try{
   if(window.firebase&&firebase.apps&&!firebase.apps.length){firebase.initializeApp(fbConfig);}
@@ -1275,37 +1283,60 @@ function markWatched(s,id){var w=getWatched(s);if(w.indexOf(id)<0){w.push(id);lo
 function markDone(s,id){var d=getDone(s);if(d.indexOf(id)<0){d.push(id);localStorage.setItem('q_'+pkey()+'_'+s,JSON.stringify(d));}}
 
 /* ════════ AUTH ════════ */
-window.doLogin=function(){
-  var no=($('inNo').value||'').trim();
-  var pw=($('inPass').value||'').trim();
-  var err=$('loginErr');
-  if(!no||!pw){err.textContent='กรุณากรอกเลขที่และรหัส';err.style.display='block';return;}
-  var noI=parseInt(no);
-  var u=null;
-  if(noI===ADMIN_NO&&pw===ADMIN_PASS){
-    var as=null;for(var i=0;i<STUDENTS.length;i++)if(STUDENTS[i].no===ADMIN_NO)as=STUDENTS[i];
-    u={no:ADMIN_NO,first:as?as.first:'Admin',last:as?as.last:'',role:'admin'};
-  }else{
-    for(var j=0;j<STUDENTS.length;j++){
-      if(STUDENTS[j].no===noI&&STUDENTS[j].id===pw){u={no:STUDENTS[j].no,first:STUDENTS[j].first,last:STUDENTS[j].last,role:'user'};break;}
-    }
-  }
-  if(!u){err.textContent='เลขที่หรือรหัสไม่ถูกต้อง';err.style.display='block';return;}
-  err.style.display='none';
-  user=u;isAdmin=(u.role==='admin');
-  /* Persist login across browser close */
-  localStorage.setItem('session_user',JSON.stringify(u));
-  startApp();
-};
+window.doLogin=function(){};
 window.doLogout=function(){
-  localStorage.removeItem('session_user');
   user=null;isAdmin=false;
-  location.reload();
+  localStorage.removeItem('session_user');
+  if(window.firebase&&firebase.auth){
+    firebase.auth().signOut().then(function(){
+      window.location.href="https://headface.app/login?r=3006";
+    }).catch(function(){
+      window.location.href="https://headface.app/login?r=3006";
+    });
+  }else{
+    window.location.href="https://headface.app/login?r=3006";
+  }
 };
-function checkSession(){
-  var s=localStorage.getItem('session_user');
-  if(s){try{user=JSON.parse(s);isAdmin=(user.role==='admin');return true;}catch(e){}}
-  return false;
+function initAuth(){
+  if(typeof firebase==='undefined'||!firebase.auth){
+    console.error("Firebase Auth SDK is not loaded!");
+    return;
+  }
+  firebase.auth().onAuthStateChanged(function(authUser){
+    if(authUser){
+      var email=authUser.email||'';
+      var match=email.match(/\d+/);
+      var st=null;
+      if(match){
+        for(var i=0;i<STUDENTS.length;i++){
+          if(String(STUDENTS[i].id)===match[0]){st=STUDENTS[i];break;}
+        }
+      }
+      if(!st){
+        var name=authUser.displayName||'';
+        for(var j=0;j<STUDENTS.length;j++){
+          if(name.indexOf(STUDENTS[j].first)>=0||name.indexOf(STUDENTS[j].last)>=0){st=STUDENTS[j];break;}
+        }
+      }
+      if(st){
+        user={no:st.no,first:st.first,last:st.last,role:(st.no===27)?'admin':'user'};
+        isAdmin=(user.role==='admin');
+      }else{
+        var guestUser={
+          no:99,
+          id:authUser.uid?authUser.uid.substring(0,6):'guest',
+          first:authUser.displayName?authUser.displayName.split(' ')[0]:'Guest',
+          last:authUser.displayName?authUser.displayName.split(' ')[1]||'':'',
+          role:'user'
+        };
+        user=guestUser;
+        isAdmin=false;
+      }
+      startApp();
+    }else{
+      window.location.href="https://headface.app/login?r=3006";
+    }
+  });
 }
 
 /* ════════ APP START ════════ */
@@ -1742,16 +1773,7 @@ function updateCommAva(){window.__updateCommAva&&window.__updateCommAva();}
 function initMap(){window.__initMap&&window.__initMap();}
 
 /* ════════ INIT ════════ */
-if(checkSession()){startApp();}
-else{
-  if(sessionStorage.getItem('w3006_seen')){
-    $('welcomeScreen').style.display='none';
-    $('loginPage').style.display='flex';
-    setTimeout(function(){var i=$('inNo');if(i)i.focus();},100);
-  }
-}
-$('inNo')&&$('inNo').addEventListener('keydown',function(e){if(e.key==='Enter')$('inPass').focus();});
-$('inPass')&&$('inPass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+initAuth();
 
 })();
 </script>
