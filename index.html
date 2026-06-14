@@ -733,8 +733,8 @@ input,textarea,select{font-family:inherit;outline:none}
     <div class="lb-sub">โรงเรียนอัสสัมชัญ · ม.3/6</div>
     <div style="margin: 30px 0 20px 0;">
       <button class="lb-btn" id="loginBtn" onclick="openLoginPopup()" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;">
-        <i class="ti ti-brand-google" style="font-size: 1.25rem;"></i>
-        เข้าสู่ระบบด้วย Google
+        <i class="ti ti-key" style="font-size: 1.25rem;"></i>
+        HEADFACE LOGIN
       </button>
     </div>
     <div class="lb-hint">🔒 เข้าสู่ระบบผ่าน Headface Portal ปลอดภัย 100%</div>
@@ -1299,12 +1299,12 @@ window.doLogout=function(){
   localStorage.removeItem('token');
   if(window.firebase&&firebase.auth){
     firebase.auth().signOut().then(function(){
-      window.location.href="https://beta.headface.app/login?r=3006";
+      window.location.href=window.location.origin;
     }).catch(function(){
-      window.location.href="https://beta.headface.app/login?r=3006";
+      window.location.href=window.location.origin;
     });
   }else{
-    window.location.href="https://beta.headface.app/login?r=3006";
+    window.location.href=window.location.origin;
   }
 };
 window.openLoginPopup = function() {
@@ -1473,6 +1473,14 @@ function startApp(){
     $('adminBannerBtn').style.display='block';
     $('adminKeySec').style.display='block';
   }
+  
+  // Set default values for playerData to avoid rendering errors on early render
+  playerData = {coins:0,badges:{},frame:'',title:'',nameColor:'',ranked:true};
+  
+  // Instantly show navbar and render/load the lobby page
+  updateNavbar();
+  goPage('lobby');
+
   loadPlayerData(function(){
     checkStreak();
     /* live listeners */
@@ -1482,7 +1490,10 @@ function startApp(){
     dbOn('community',function(d){communityPosts=d||{};if(curPage==='community')renderCommunity();});
     dbOn('banners',function(d){bannerData=d||{urls:[]};if(curPage==='lobby')renderBanner();});
     updateNavbar();
-    goPage('lobby');
+    if(curPage==='lobby') {
+      updateLobbyCard();
+      renderLobbyCards();
+    }
   });
 }
 
