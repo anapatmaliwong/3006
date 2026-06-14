@@ -1292,6 +1292,11 @@ window.doLogin=function(){};
 window.doLogout=function(){
   user=null;isAdmin=false;
   localStorage.removeItem('session_user');
+  localStorage.removeItem('first_name');
+  localStorage.removeItem('last_name');
+  localStorage.removeItem('number');
+  localStorage.removeItem('student_id');
+  localStorage.removeItem('token');
   if(window.firebase&&firebase.auth){
     firebase.auth().signOut().then(function(){
       window.location.href="https://beta.headface.app/login?r=3006";
@@ -1317,7 +1322,7 @@ function initAuth(){
   }
 
   // 1. Listen for auth tokens sent via postMessage (from the login popup window)
-  window.addEventListener('message', function(event) {
+  window.addEventListener('message', async function(event) {
     var allowedOrigins = ['https://headface.app', 'https://beta.headface.app'];
     var isAllowed = allowedOrigins.indexOf(event.origin) !== -1 || event.origin.includes('localhost') || event.origin.includes('127.0.0.1');
     if (!isAllowed) return;
@@ -1359,7 +1364,31 @@ function initAuth(){
             appName: "[DEFAULT]"
           };
           localStorage.setItem(key, JSON.stringify(authUserData));
-          console.log("Firebase Auth session stored. Reloading to enter lobby...");
+          console.log("Firebase Auth session stored.");
+
+          try {
+            console.log("Fetching student profile from Workers API...");
+            var res = await fetch("https://headface.ac-headface.workers.dev/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ token: token, OAuth: true })
+            });
+            var json = await res.json();
+            if (json && json.data && json.data.length > 0) {
+              var data = json.data[0];
+              localStorage.setItem("first_name", data.first_name);
+              localStorage.setItem("last_name", data.last_name);
+              localStorage.setItem("number", data.number);
+              localStorage.setItem("student_id", data.student_id);
+              localStorage.setItem("token", token);
+              console.log("Profile data saved successfully. Entering main lobby...");
+            } else {
+              console.warn("No student profile data found in worker API response");
+            }
+          } catch (apiErr) {
+            console.error("Failed to query student profile API:", apiErr);
+          }
+
           window.location.reload();
         }
       } catch (err) {
