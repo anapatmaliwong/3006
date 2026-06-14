@@ -1368,7 +1368,7 @@ function initAuth(){
 
           try {
             console.log("Fetching student profile from Workers API...");
-            var res = await fetch("https://headface.ac-headface.workers.dev/login", {
+            var res = await fetch("https://beta-headface.ac-headface.workers.dev/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ token: token, OAuth: true })
