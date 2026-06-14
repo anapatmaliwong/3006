@@ -1289,12 +1289,12 @@ window.doLogout=function(){
   localStorage.removeItem('session_user');
   if(window.firebase&&firebase.auth){
     firebase.auth().signOut().then(function(){
-      window.location.href="https://headface.app/login?r=3006";
+      window.location.href="https://beta.headface.app/login?r=3006";
     }).catch(function(){
-      window.location.href="https://headface.app/login?r=3006";
+      window.location.href="https://beta.headface.app/login?r=3006";
     });
   }else{
-    window.location.href="https://headface.app/login?r=3006";
+    window.location.href="https://beta.headface.app/login?r=3006";
   }
 };
 function initAuth(){
@@ -1334,7 +1334,7 @@ function initAuth(){
       }
       startApp();
     }else{
-      window.location.href="https://headface.app/login?r=3006";
+      window.location.href="https://beta.headface.app/login?r=3006";
     }
   });
 }
