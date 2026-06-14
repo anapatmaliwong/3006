@@ -19,7 +19,7 @@ window.startWelcomeVideo=function(){
       if(f){f.style.transition='opacity .4s';f.style.opacity='1';}
       setTimeout(function(){
         if(s)s.style.display='none';document.body.style.overflow='';
-        var lp=document.getElementById('loginPage');if(lp)lp.style.display='none';
+        var lp=document.getElementById('loginPage');if(lp)lp.style.display='flex';
       },430);
     }
     setTimeout(function(){
@@ -39,7 +39,7 @@ window.startWelcomeVideo=function(){
   }catch(e){
     var s2=document.getElementById('welcomeScreen');if(s2)s2.style.display='none';
     document.body.style.overflow='';
-    var lp2=document.getElementById('loginPage');if(lp2)lp2.style.display='none';
+    var lp2=document.getElementById('loginPage');if(lp2)lp2.style.display='flex';
   }
 };
 </script>
@@ -728,11 +728,13 @@ input,textarea,select{font-family:inherit;outline:none}
   <div class="lb">
     <div class="lb-logo">3006</div>
     <div class="lb-sub">โรงเรียนอัสสัมชัญ · ม.3/6</div>
-    <div class="lf"><label>เลขที่</label><input type="number" id="inNo" placeholder="1 – 35" min="1" max="35"></div>
-    <div class="lf"><label>รหัสประจำตัว</label><input type="password" id="inPass" placeholder="กรอกรหัสประจำตัว"></div>
-    <button class="lb-btn" id="loginBtn" onclick="doLogin()">เข้าสู่โลก 3006 →</button>
-    <div class="lb-err" id="loginErr"></div>
-    <div class="lb-hint">🔒 ระบบจะ logout อัตโนมัติเมื่อปิดเบราว์เซอร์</div>
+    <div style="margin: 30px 0 20px 0;">
+      <button class="lb-btn" id="loginBtn" onclick="openLoginPopup()" style="display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;">
+        <i class="ti ti-brand-google" style="font-size: 1.25rem;"></i>
+        เข้าสู่ระบบด้วย Google
+      </button>
+    </div>
+    <div class="lb-hint">🔒 เข้าสู่ระบบผ่าน Headface Portal ปลอดภัย 100%</div>
   </div>
 </div>
 
@@ -1297,11 +1299,38 @@ window.doLogout=function(){
     window.location.href="https://beta.headface.app/login?r=3006";
   }
 };
+window.openLoginPopup = function() {
+  var width = 500, height = 650;
+  var left = (window.screen.width / 2) - (width / 2);
+  var top = (window.screen.height / 2) - (height / 2);
+  var popup = window.open("https://headface.app/login?r=3006", "headface_login", "width=" + width + ",height=" + height + ",top=" + top + ",left=" + left + ",status=no,menubar=no,toolbar=no,location=no");
+  if (window.focus && popup) popup.focus();
+};
+
 function initAuth(){
   if(typeof firebase==='undefined'||!firebase.auth){
     console.error("Firebase Auth SDK is not loaded!");
     return;
   }
+
+  // 1. Listen for auth tokens sent via postMessage (from the login popup window)
+  window.addEventListener('message', function(event) {
+    var allowedOrigins = ['https://headface.app', 'https://beta.headface.app'];
+    var isAllowed = allowedOrigins.indexOf(event.origin) !== -1 || event.origin.includes('localhost') || event.origin.includes('127.0.0.1');
+    if (!isAllowed) return;
+
+    if (event.data && event.data.type === 'firebase-token') {
+      var token = event.data.token;
+      var credential = firebase.auth.GoogleAuthProvider.credential(token);
+      firebase.auth().signInWithCredential(credential).then(function() {
+        console.log("Logged in successfully using token via postMessage");
+      }).catch(function(err) {
+        console.error("Token sign-in failed:", err);
+      });
+    }
+  });
+
+  // 2. Track Firebase Auth state on 3006.headface.app
   firebase.auth().onAuthStateChanged(function(authUser){
     if(authUser){
       var email=authUser.email||'';
@@ -1334,7 +1363,15 @@ function initAuth(){
       }
       startApp();
     }else{
-      window.location.href="https://beta.headface.app/login?r=3006";
+      // If no local session is present, check if we should show the welcome screen or the login page directly
+      if (sessionStorage.getItem('w3006_seen')) {
+        var s = document.getElementById('welcomeScreen'); if (s) s.style.display = 'none';
+        document.body.style.overflow = '';
+        var lp = document.getElementById('loginPage'); if (lp) lp.style.display = 'flex';
+      } else {
+        var s2 = document.getElementById('welcomeScreen'); if (s2) s2.style.display = 'flex';
+        var lp2 = document.getElementById('loginPage'); if (lp2) lp2.style.display = 'none';
+      }
     }
   });
 }
