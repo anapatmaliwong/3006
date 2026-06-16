@@ -1397,8 +1397,22 @@ function initAuth(){
             });
             var json = await res.json();
             console.log(json);
-            if (json && json.data && json.data.length > 0) {
-              var data = json.data[0];
+            
+            // Debugging alert to show the developer the API response
+            alert("API HTTP Status: " + res.status + "\nAPI Response JSON: " + JSON.stringify(json));
+
+            var data = null;
+            if (json) {
+              if (json.data && json.data.length > 0) {
+                data = json.data[0];
+              } else if (json.student) {
+                data = json.student;
+              } else if (json.first_name || json.first || json.number || json.no || json.student_id || json.id) {
+                data = json;
+              }
+            }
+
+            if (data) {
               // Support both naming formats returned from Worker API
               var fName = data.first_name || data.first || "";
               var lName = data.last_name || data.last || "";
@@ -1421,6 +1435,7 @@ function initAuth(){
             }
           } catch (apiErr) {
             console.error("Failed to query student profile API:", apiErr);
+            alert("Fetch/Parse Error: " + apiErr.message);
           }
 
           window.location.reload();
