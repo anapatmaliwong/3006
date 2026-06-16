@@ -1322,8 +1322,8 @@ window.openLoginPopup = function() {
 function initAuth(){
   // Check if we have a valid session in localStorage
   var token = localStorage.getItem('token');
-  var studentId = localStorage.getItem('student_id') || localStorage.getItem('id');
-  if (token && studentId) {
+  if (token) {
+    var studentId = localStorage.getItem('student_id') || localStorage.getItem('id') || "undefined";
     var localNo = parseInt(localStorage.getItem("number") || localStorage.getItem("no") || "99");
     var localFirst = localStorage.getItem("first_name") || localStorage.getItem("first") || "Guest";
     var localLast = localStorage.getItem("last_name") || localStorage.getItem("last") || "";
@@ -1403,7 +1403,7 @@ function initAuth(){
               var fName = data.first_name || data.first || "";
               var lName = data.last_name || data.last || "";
               var numVal = data.number || data.no || "";
-              var stdId = data.student_id || data.id || "";
+              var stdId = data.student_id || data.id || "undefined";
 
               // Save in both keys (e.g. number/no, first_name/first) to match any system expectation
               localStorage.setItem("first_name", fName);
