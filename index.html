@@ -737,7 +737,7 @@ input,textarea,select{font-family:inherit;outline:none}
         HEADFACE LOGIN
       </button>
     </div>
-    <div class="lb-hint">🔒 เข้าสู่ระบบผ่าน Headface Portal ปลอดภัย 100%</div>
+    <div class="lb-hint">🔒 เข้าสู่ระบบผ่าน HEADFACE STANDARD</div>
   </div>
 </div>
 
@@ -1293,9 +1293,13 @@ window.doLogout=function(){
   user=null;isAdmin=false;
   localStorage.removeItem('session_user');
   localStorage.removeItem('first_name');
+  localStorage.removeItem('first');
   localStorage.removeItem('last_name');
+  localStorage.removeItem('last');
   localStorage.removeItem('number');
+  localStorage.removeItem('no');
   localStorage.removeItem('student_id');
+  localStorage.removeItem('id');
   localStorage.removeItem('token');
   if(window.firebase&&firebase.auth){
     firebase.auth().signOut().then(function(){
@@ -1318,11 +1322,11 @@ window.openLoginPopup = function() {
 function initAuth(){
   // Check if we have a valid session in localStorage
   var token = localStorage.getItem('token');
-  var studentId = localStorage.getItem('student_id');
+  var studentId = localStorage.getItem('student_id') || localStorage.getItem('id');
   if (token && studentId) {
-    var localNo = parseInt(localStorage.getItem("number") || "99");
-    var localFirst = localStorage.getItem("first_name") || "Guest";
-    var localLast = localStorage.getItem("last_name") || "";
+    var localNo = parseInt(localStorage.getItem("number") || localStorage.getItem("no") || "99");
+    var localFirst = localStorage.getItem("first_name") || localStorage.getItem("first") || "Guest";
+    var localLast = localStorage.getItem("last_name") || localStorage.getItem("last") || "";
     user = {
       no: localNo,
       first: localFirst,
@@ -1395,10 +1399,21 @@ function initAuth(){
             console.log(json);
             if (json && json.data && json.data.length > 0) {
               var data = json.data[0];
-              localStorage.setItem("first_name", data.first_name);
-              localStorage.setItem("last_name", data.last_name);
-              localStorage.setItem("number", data.number);
-              localStorage.setItem("student_id", data.student_id);
+              // Support both naming formats returned from Worker API
+              var fName = data.first_name || data.first || "";
+              var lName = data.last_name || data.last || "";
+              var numVal = data.number || data.no || "";
+              var stdId = data.student_id || data.id || "";
+
+              // Save in both keys (e.g. number/no, first_name/first) to match any system expectation
+              localStorage.setItem("first_name", fName);
+              localStorage.setItem("first", fName);
+              localStorage.setItem("last_name", lName);
+              localStorage.setItem("last", lName);
+              localStorage.setItem("number", numVal);
+              localStorage.setItem("no", numVal);
+              localStorage.setItem("student_id", stdId);
+              localStorage.setItem("id", stdId);
               localStorage.setItem("token", token);
               console.log("Profile data saved successfully. Entering main lobby...");
             } else {
